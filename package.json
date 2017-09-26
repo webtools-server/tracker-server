@@ -1,0 +1,46 @@
+{
+  "name": "tracker-server",
+  "version": "1.0.0",
+  "description": "前端数据服务",
+  "private": true,
+  "dependencies": {
+    "decompress": "^4.2.0",
+    "egg": "^1.7.0",
+    "egg-scripts": "^1.0.0",
+    "egg-view-nunjucks": "^2.1.3",
+    "fs-extra": "^4.0.1"
+  },
+  "devDependencies": {
+    "@jyb/eslint-config-jyb": "^1.0.1",
+    "autod": "^2.9.0",
+    "autod-egg": "^1.0.0",
+    "egg-bin": "^4.1.0",
+    "egg-ci": "^1.8.0",
+    "egg-mock": "^3.9.0",
+    "eslint": "^4.3.0"
+  },
+  "engines": {
+    "node": ">=6.0.0"
+  },
+  "scripts": {
+    "start": "egg-scripts start --daemon",
+    "stop": "egg-scripts stop",
+    "dev": "egg-bin dev",
+    "release": "sh release.sh",
+    "test": "npm run lint -- --fix && npm run test-local",
+    "test-local": "egg-bin test",
+    "cov": "egg-bin cov",
+    "lint": "eslint .",
+    "ci": "npm run lint && npm run cov",
+    "autod": "autod"
+  },
+  "ci": {
+    "version": "6, 8"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "author": "canye.wu@jyblife.com",
+  "license": "MIT"
+}
