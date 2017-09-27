@@ -3,7 +3,6 @@
  */
 
 const util = require('../common/util');
-const { RET_CODE } = require('../common/enum');
 const { QUERY_URL } = require('../common/config');
 
 module.exports = (app) => {
@@ -65,23 +64,8 @@ module.exports = (app) => {
         headers: { 'Content-Type': 'application/json' },
         content: sqlContent
       });
-      const jsondata = JSON.parse(result.data.toString('utf8'));
 
-      // 如果没有错误
-      if (!jsondata.error) {
-        return {
-          code: RET_CODE.OK,
-          data: {
-            total: jsondata.hits.total,
-            list: jsondata.hits.hits.map(d => d._source.op_params)
-          }
-        };
-      }
-
-      return {
-        code: RET_CODE.ERROR,
-        msg: jsondata.error.type
-      };
+      return JSON.parse(result.data.toString('utf8'));
     }
   }
   return ErrorService;

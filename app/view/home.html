@@ -1,8 +1,12 @@
 {% extends "layout.html" %}
 
 {% block head %}
+  {{ helper.require("css/home.style.css") }}
+  {{ helper.require("css/home.vue.css") }}
+  {{ helper.require("css/home.css") }}
 {% endblock %}
 
 {% block body %}
-hello
+  <div id=app></div>
+  {{ helper.require("js/home.js") }}
 {% endblock %}

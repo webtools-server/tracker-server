@@ -14,7 +14,7 @@ module.exports = (appInfo) => {
 
   config.static = {
     prefix: '',
-    dir: path.join(appInfo.baseDir, 'app/public'),
+    dir: path.join(appInfo.baseDir, 'public'),
   };
 
   config.multipart = {
