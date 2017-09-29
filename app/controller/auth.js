@@ -10,6 +10,11 @@ module.exports = (app) => {
   /* eslint-disable require-yield */
   class AuthController extends app.Controller {
     * login() {
+      if (this.ctx.session.username) {
+        this.ctx.redirect('/');
+        return;
+      }
+
       yield this.ctx.render('login.html', {
         title: '登录'
       });
