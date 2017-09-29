@@ -1,12 +1,14 @@
+/**
+ * 路由
+ */
+
 import Vue from 'vue';
 import Abstract from 'routes/common/abstract.vue';
 import NotFound from 'routes/common/404.vue';
+import Help from 'routes/help/index.vue';
 
-// list with filters page
 import ErrorComp from 'routes/list/error.vue';
-import BigForm from 'routes/form/big-form.vue';
-import Login from 'routes/login/login.vue';
-import chart from 'routes/chart/chart.vue';
+import Dashboard from 'routes/dashboard/index.vue';
 
 const root = Vue.component('root', {
   template: '<router-view></router-view>'
@@ -14,39 +16,26 @@ const root = Vue.component('root', {
 
 const routes = [
   {
-    path: '/login',
-    component: Login,
-    name: 'login',
-    meta: {
-      hidden: true
-    }
-  },
-  {
     path: '/404',
     component: NotFound,
-    name: '404',
-    meta: {
-      requiresAuth: true
-    }
+    name: '404'
   },
   {
     path: '/',
     component: root,
-    meta: {
-      requiresAuth: true
-    },
+    redirect: 'dashboard',
     children: [
       {
-        path: 'chart',
-        component: chart,
+        path: 'dashboard',
+        component: Dashboard,
         name: '仪表盘',
-        iconClass: 'el-icon-document'
+        iconClass: 'el-icon-view'
       },
       {
         path: 'list',
         component: Abstract,
         name: '数据列表',
-        iconClass: 'el-icon-message',
+        iconClass: 'el-icon-document',
         children: [
           {
             path: 'error',
@@ -54,34 +43,26 @@ const routes = [
             component: ErrorComp,
             imgUrl: 'https://o0p2g4ul8.qnssl.com/vsite%2Fbackground.jpg'
           },
-          {
-            path: 'api',
-            name: '接口',
-            component: ErrorComp,
-            imgUrl: 'https://o0p2g4ul8.qnssl.com/vsite%2Fbackground.jpg'
-          }
+          // {
+          //   path: 'api',
+          //   name: '接口',
+          //   component: NotFound,
+          //   imgUrl: 'https://o0p2g4ul8.qnssl.com/vsite%2Fbackground.jpg'
+          // },
+          // {
+          //   path: 'perf',
+          //   name: '性能',
+          //   component: NotFound,
+          //   imgUrl: 'https://o0p2g4ul8.qnssl.com/vsite%2Fbackground.jpg'
+          // }
         ]
       },
       {
         path: 'help',
-        component: chart,
+        component: Help,
         name: '帮助',
-        iconClass: 'el-icon-document'
-      },
-      // {
-      //   path: 'form',
-      //   component: Abstract,
-      //   name: '表单',
-      //   iconClass: 'el-icon-document',
-      //   children: [
-      //     {
-      //       path: 'big-form',
-      //       name: '简历管理',
-      //       component: BigForm,
-      //       imgUrl: 'https://o0p2g4ul8.qnssl.com/vsite%2Fbackground.jpg'
-      //     }
-      //   ]
-      // }
+        iconClass: 'el-icon-information'
+      }
     ]
   },
   {

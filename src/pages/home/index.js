@@ -1,3 +1,7 @@
+/**
+ * home
+ */
+
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 
@@ -6,10 +10,6 @@ import 'element-ui/lib/theme-default/index.css';
 
 import Breadcrumb from 'components/breadcrumb.vue';
 
-// start mock
-// import Mock from '../../mock';
-// Mock.bootstrap();
-
 import App from './app.vue';
 import routes from './routes';
 import './index.scss';
@@ -17,7 +17,6 @@ import './index.scss';
 Vue.use(VueRouter);
 Vue.use(ElementUI);
 
-// register dashboard components
 Vue.component('db-breadcrumb', Breadcrumb);
 
 const router = new VueRouter({

@@ -3,6 +3,7 @@
  */
 
 import axios from 'axios';
+import { Message } from 'element-ui';
 
 const axiosInstance = axios.create({
   baseURL: '/api/v1'
@@ -11,33 +12,46 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.response.use((res) => {
   return res.data;
 }, (error) => {
-
+  /* eslint-disable new-cap */
+  Message({
+    message: error.toString(),
+    type: 'error'
+  });
 });
 
+/**
+ * 获取列表
+ * @param {Object} params
+ */
 export function fetchList(params) {
   return axiosInstance.get('/query', { params });
 }
 
-export function parseSourceMap() {
-  return {};
+/**
+ * sourcemap
+ * @param {Object} data
+ */
+export function translate(data = {}) {
+  return axiosInstance.post('/translate', data);
 }
 
-// export const addUser = params => { return axios.post(`${ base }/user/add`, params); };
+/**
+ * 根据日期统计，默认获取7天
+ */
+export function getCountByDate() {
+  return axiosInstance.get('/count/date');
+}
 
-// export const editUser = params => { return axios.post(`${ base }/user/edit`, params); };
+/**
+ * 根据小时统计
+ */
+export function getCountByHour() {
+  return axiosInstance.get('/count/hour');
+}
 
-// export const removeUser = params => { return axios.post(`${ base }/user/remove`, params); };
-
-// export const postError = params => { return axios.get(`${ base }/error`, { params: params }); };
-
-// export const requestLogin = params => { return axios.post(`${ base }/login`, params).then(res => res.data); };
-
-// export const fetchSchoolList = params => { return axios.get(`${ base }/schools`).then(res => res.data); };
-
-// export const fetchWorkDurationOptions = params => { return axios.get(`${ base }/work_durations`).then(res => res.data); };
-
-// export const fetchAcademicOptions = params => { return axios.get(`${ base }/academics`).then(res => res.data); };
-
-// export const postResume = params => { return axios.post(`${ base }/resume`, params).then(res => res.data); };
-
-// export const createResume = params => { return axios.post(`${ base }/resume/add`).then(res => res.data); };
+/**
+ * 根据维度统计
+ */
+export function getCountByDim() {
+  return axiosInstance.get('/count/dim');
+}

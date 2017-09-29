@@ -3,16 +3,14 @@
     <template v-if="!$route.meta.hidden">
       <!-- header start  -->
       <header class="db-header">
-        <router-link class="logo" :to="{path: '/list/filters'}">Tracker Server</router-link>
-        <div class="user-info" v-if="user.id">
+        <router-link class="logo" :to="{path: '/'}">tracker</router-link>
+        <div class="user-info" v-if="user.username">
           <span v-text="user.username"></span>
           <el-dropdown trigger="click">
             <span class="el-dropdown-link">
-              <img :src="user.avatar">
+              <img class="avatar" :src="user.avatar">
             </span>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item>个人信息</el-dropdown-item>
-              <el-dropdown-item>设置</el-dropdown-item>
               <el-dropdown-item @click.native="logout">注销</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
@@ -25,7 +23,7 @@
 
         <!-- menu start -->
         <aside class="db-menu-wrapper">
-          <el-menu :default-active="activeMenu" class="db-menu-bar" router>
+          <el-menu :default-active="activeMenu" theme="dark" class="db-menu-bar" router>
             <template v-for="(route, index) in $router.options.routes[$router.options.routes.length - 2].children">
               <template v-if="route.children && route.name">
                 <el-submenu :index="route.name">
@@ -59,25 +57,26 @@
 </template>
 
 <script>
+import viewState from '../../utils/view_state';
+import avatarImg from '../../assets/img/avatar.png'
+
 export default {
   data() {
     return {
       user: {
-        id: '',
         username: '',
-        avatar: ''
+        avatar: avatarImg
       },
       activeMenu: ''
     };
   },
   created() {
     this.activeMenu = this.$route.name;
-    this.user = JSON.parse(localStorage.getItem('user'));
+    this.user = Object.assign({}, this.user, viewState.user);
   },
   watch: {
     '$route'(to, from) {
       this.activeMenu = this.$route.name;
-      this.user = JSON.parse(localStorage.getItem('user'));
     }
   },
   methods: {
@@ -87,8 +86,7 @@ export default {
         cancelButtonText: '取消',
         type: 'info'
       }).then(() => {
-        localStorage.removeItem('user');
-        this.$router.push({ path: '/login' });
+        window.location.href = '/auth/logout';
       }).catch(() => {});
     }
   }
@@ -102,6 +100,11 @@ export default {
   .el-dropdown-menu {
     margin-top: 20px;
   }
+
+  .avatar {
+    border-radius: 50%;
+  }
+
   // header
   .db-header {
     width: 100%;

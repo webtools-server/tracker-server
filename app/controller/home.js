@@ -5,10 +5,12 @@
 module.exports = (app) => {
   class HomeController extends app.Controller {
     * index() {
-      const ctx = this.ctx;
-      const title = 'tracker server';
-
-      yield ctx.render('home.html', { title });
+      yield this.ctx.render('home.html', {
+        title: 'tracker',
+        viewState: {
+          user: { username: this.ctx.session.username }
+        }
+      });
     }
   }
   return HomeController;

@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+
+{% block head %}
+  {{ helper.require("css/login.style.css") }}
+  {{ helper.require("css/login.vue.css") }}
+  {{ helper.require("css/login.css") }}
+{% endblock %}
+
+{% block body %}
+  <div id=app></div>
+  {{ helper.require("js/login.js") }}
+{% endblock %}

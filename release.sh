@@ -16,13 +16,15 @@ echo "create $releasedir"
 mkdir "$releasedir"
 
 # copy project files
-cp -v "$workdir/package.json" "$releasedir/package.json"
-cp -v "$workdir/index.js" "$releasedir/index.js"
 cp -vr "$workdir/app" "$releasedir/app"
 cp -vr "$workdir/config" "$releasedir/config"
+cp -vr "$workdir/public" "$releasedir/public"
+
+cp -v "$workdir/package.json" "$releasedir/package.json"
+cp -v "$workdir/index.js" "$releasedir/index.js"
 
 # release
 echo "entering $releasedir & scp"
 cd $releasedir
 
-scp -P 36000 -r ./ root@172.16.1.10:/data1/fe_www/docs-server
+scp -P 36000 -r ./ root@172.16.1.10:/data1/fe_www/tracker

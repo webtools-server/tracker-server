@@ -10,7 +10,9 @@ module.exports = (appInfo) => {
   // should change to your own
   config.keys = `${appInfo.name}_1502874753953_2868`;
 
-  config.middleware = ['defaultIndex'];
+  config.middleware = [
+    'userAuth'
+  ];
 
   config.static = {
     prefix: '',
@@ -25,13 +27,9 @@ module.exports = (appInfo) => {
     defaultViewEngine: 'nunjucks'
   };
 
-  config.nunjucks = {
-    cache: true // local env is false
-  };
-
   config.security = {
     csrf: {
-      ignore: '/api'
+      ignore: ['/api', '/auth']
     }
   };
 

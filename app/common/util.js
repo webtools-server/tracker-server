@@ -2,8 +2,19 @@
  * util
  */
 
+const crypto = require('crypto');
+
 const toStr = Object.prototype.toString;
 const hasOwn = Object.prototype.hasOwnProperty;
+
+/**
+ * md5加密
+ * @param {String} text
+ * @return {String}
+ */
+function md5(text) {
+  return crypto.createHash('md5').update(text).digest('hex');
+}
 
 /**
  * 是否对象
@@ -25,5 +36,6 @@ function hasOwnProp(obj, k) {
 
 module.exports = {
   isObject,
-  hasOwnProp
+  hasOwnProp,
+  md5
 };

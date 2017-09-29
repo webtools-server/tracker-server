@@ -3,6 +3,7 @@
  */
 
 const path = require('path');
+const fse = require('fs-extra');
 
 module.exports = {
   build(abc, context) {
@@ -20,6 +21,10 @@ module.exports = {
         components: path.join(__dirname, 'src/components')
       },
       defineConstants: {}
+    });
+
+    context.on('before', () => {
+      fse.emptyDirSync(path.join(__dirname, 'public'));
     });
   }
 };

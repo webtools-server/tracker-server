@@ -7,6 +7,7 @@
 {% endblock %}
 
 {% block body %}
+  <input id="__VIEW_STATE__" type="hidden" value="{{viewState | dump}}">
   <div id=app></div>
   {{ helper.require("js/home.js") }}
 {% endblock %}

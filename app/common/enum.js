@@ -5,7 +5,16 @@
 // sql查询条件类型
 const SQL_CONDITION_TYPE = {
   NORMAL: 0, // 普通
-  LIKE: 1 // like
+  LIKE: 1, // like
+  GTE: 2, // 大于等于
+  LTE: 3 // 小于等于
+};
+
+// 统计类型
+const COUNT_TYPE = {
+  DATE: 'date',
+  HOUR: 'hour',
+  DIM: 'dim'
 };
 
 // 采集数据类型
@@ -23,5 +32,6 @@ const RET_CODE = {
 module.exports = {
   SQL_CONDITION_TYPE,
   TRACKER_TYPE,
-  RET_CODE
+  RET_CODE,
+  COUNT_TYPE
 };
