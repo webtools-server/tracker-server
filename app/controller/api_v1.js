@@ -92,7 +92,7 @@ module.exports = (app) => {
 
       const sqlObj = {
         where: [['op_type', 'error'], ['op_params.t_type', TRACKER_TYPE.ERROR]].concat(whereArr),
-        order: [['op_params.timestamp', 'desc']],
+        order: [['@timestamp', 'desc']],
         limit: PAGE_NUM,
         offset: (page - 1) * PAGE_NUM
       };
