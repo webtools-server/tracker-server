@@ -1,170 +1,66 @@
 <template lang="html">
-  <div class="main">
-    <el-row :gutter="24">
-      <!-- 按天统计（最新7天） -->
-      <el-col :span="12">
-        <div class="grid-content">
-          <div id="chart-count-date"></div>
-        </div>
-      </el-col>
-      <!-- 按小时统计 -->
-      <el-col :span="12">
-        <div class="grid-content">
-          <div id="chart-count-hour"></div>
-        </div>
-      </el-col>
-    </el-row>
-
-    <el-row :gutter="24">
-      <!-- 按维度统计 -->
-      <el-col :span="12">
-        <div class="grid-content">
-          <div id="chart-platform"></div>
-        </div>
-      </el-col>
-      <el-col :span="12">
-        <div class="grid-content">
-          <div id="chart-network"></div>
-        </div>
-      </el-col>
-    </el-row>
-
+  <div class="dashboard-main">
+    <el-tabs v-model="activeName" @tab-click="handleClick">
+      <el-tab-pane label="错误数据" name="error">
+        <chart v-if="activeName === 'error'" :chart-id="chartID" :chart-name="chartName" :chart-type="chartType"></chart>
+      </el-tab-pane>
+      <el-tab-pane label="接口数据" name="api">
+        <chart v-if="activeName === 'api'" :chart-id="chartID" :chart-name="chartName" :chart-type="chartType"></chart>
+      </el-tab-pane>
+      <el-tab-pane label="性能数据" name="perf">
+        <chart v-if="activeName === 'perf'" :chart-id="chartID" :chart-name="chartName" :chart-type="chartType"></chart>
+      </el-tab-pane>
+    </el-tabs>
   </div>
 </template>
 
 <script>
-import echarts from 'echarts';
+import Chart from './chart.vue';
 import * as api from '../../api';
+import helper from '../../utils/helper';
 
 export default {
   data() {
     return {
+      activeName: 'error',
+      chartID: 'db-error-chart',
+      chartName: '脚本错误数',
+      chartType: helper.getTrackerType('error')
     };
   },
+  components: {
+    chart: Chart
+  },
   methods: {
-    setChartBarOptions(ctx, title, data) {
-      ctx.setOption({
-        title: {
-          text: title,
-          left: 'center'
-        },
-        tooltip: {},
-        xAxis: {
-          data: data.map(d => d.date)
-        },
-        yAxis: {},
-        series: [{
-          name: '错误数',
-          type: 'bar',
-          data: data.map(d => d.count)
-        }]
-      });
-    },
-    setChartLineOptions(ctx, title, data) {
-      ctx.setOption({
-        title: {
-          text: title,
-          left: 'center'
-        },
-        tooltip: {
-          trigger: 'axis'
-        },
-        xAxis: {
-          type: 'category',
-          boundaryGap: false,
-          data: data.map(d => d.time)
-        },
-        yAxis: {
-          type: 'value'
-        },
-        series: [{
-          name: '错误数',
-          type: 'line',
-          smooth: true,
-          data: data.map(d => d.count)
-        }]
-      });
-    },
-    setChartPieOptions(ctx, title, data) {
-      //  饼图
-      ctx.setOption({
-        title: {
-          text: title,
-          left: 'center',
-          top: 20,
-        },
-        tooltip: {
-          trigger: 'item',
-          formatter: '{a} <br/>{b} : {c} ({d}%)'
-        },
-        series: [
-          {
-            name: '错误数',
-            type: 'pie',
-            radius: '55%',
-            center: ['50%', '50%'],
-            data: data.sort((a, b) => {
-              return a.value - b.value;
-            }),
-            itemStyle: {
-              emphasis: {
-                shadowBlur: 10,
-                shadowOffsetX: 0,
-                shadowColor: 'rgba(0, 0, 0, 0.5)'
-              }
-            },
-            animationType: 'scale',
-            animationEasing: 'elasticOut',
-            animationDelay: function(idx) {
-              return Math.random() * 200;
-            }
-          }
-        ]
-      });
+    handleClick(tab, event) {
+      switch (tab.name) {
+        case 'error': {
+          this.chartID = 'db-error-chart';
+          this.chartName = '脚本错误数';
+          this.chartType = helper.getTrackerType('error');
+          break;
+        }
+        case 'api': {
+          this.chartID = 'db-api-chart';
+          this.chartName = '接口异常数';
+          this.chartType = helper.getTrackerType('api');
+          break;
+        }
+        case 'perf': {
+          this.chartID = 'db-perf-chart';
+          this.chartName = '性能数据';
+          this.chartType = helper.getTrackerType('perf');
+          break;
+        }
+      }
     }
   },
   mounted() {
-    // 按天统计（最新7天）
-    const chartCountDate = echarts.init(document.getElementById('chart-count-date'));
-    const chartCountDateTitle = '按天统计（最新7天）';
 
-    this.setChartBarOptions(chartCountDate, chartCountDateTitle, []);
-    api.getCountByDate().then((res) => {
-      this.setChartBarOptions(chartCountDate, chartCountDateTitle, res.data);
-    });
-
-    // 按小时统计
-    const chartCountHour = echarts.init(document.getElementById('chart-count-hour'));
-    const chartCountHourTitle = '按小时统计';
-
-    this.setChartLineOptions(chartCountHour, chartCountHourTitle, []);
-    api.getCountByHour().then((res) => {
-      this.setChartLineOptions(chartCountHour, chartCountHourTitle, res.data);
-    });
-
-    // 按维度统计
-    const chartPlatform = echarts.init(document.getElementById('chart-platform'));
-    const chartNetwork = echarts.init(document.getElementById('chart-network'));
-    const chartPlatformTitle = '平台';
-    const chartNetworkTitle = '网络类型';
-
-    this.setChartPieOptions(chartPlatform, chartPlatformTitle, []);
-    this.setChartPieOptions(chartNetwork, chartNetworkTitle, []);
-    api.getCountByDim().then((res) => {
-      const jsondata = res.data;
-
-      this.setChartPieOptions(chartPlatform, chartPlatformTitle, jsondata.platform);
-      this.setChartPieOptions(chartNetwork, chartNetworkTitle, jsondata.network);
-    });
   }
 };
 </script>
 
 <style lang="scss" scoped>
-  .el-row {
-    margin-bottom: 25px;
-  }
-  #chart-count-date, #chart-count-hour, #chart-platform, #chart-network {
-    height: 350px;
-  }
+
 </style>

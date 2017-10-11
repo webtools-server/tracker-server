@@ -23,8 +23,16 @@ axiosInstance.interceptors.response.use((res) => {
  * 获取列表
  * @param {Object} params
  */
-export function fetchList(params) {
-  return axiosInstance.get('/query', { params });
+export function fetchErrorList(params) {
+  return axiosInstance.get('/query_error', { params });
+}
+
+/**
+ * 获取API列表
+ * @param {Object} params
+ */
+export function fetchApiList(params) {
+  return axiosInstance.get('/query_api', { params });
 }
 
 /**
@@ -38,20 +46,20 @@ export function translate(data = {}) {
 /**
  * 根据日期统计，默认获取7天
  */
-export function getCountByDate() {
-  return axiosInstance.get('/count/date');
+export function getCountByDate(params) {
+  return axiosInstance.get('/count/date', { params });
 }
 
 /**
  * 根据小时统计
  */
-export function getCountByHour() {
-  return axiosInstance.get('/count/hour');
+export function getCountByHour(params) {
+  return axiosInstance.get('/count/hour', { params });
 }
 
 /**
  * 根据维度统计
  */
-export function getCountByDim() {
-  return axiosInstance.get('/count/dim');
+export function getCountByDim(params) {
+  return axiosInstance.get('/count/dim', { params });
 }

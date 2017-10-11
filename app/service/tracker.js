@@ -1,14 +1,14 @@
 /**
- * error service
+ * tracker service
  */
 
 const util = require('../common/util');
 const { QUERY_URL } = require('../common/config');
 
 module.exports = (app) => {
-  class ErrorService extends app.Service {
-    * getCountByDate(date) {
-      const sqlContent = `select count(*) from access_app_tracker.app_evt-${date}/push where op_type='error' and op_params.t_type='1'`;
+  class TrackerService extends app.Service {
+    * getCountByDate(trackerType, date) {
+      const sqlContent = `select count(*) from access_app_tracker.app_evt-${date}/push where op_type='error' and op_params.t_type=${trackerType}`;
       const jsondata = yield this.request(sqlContent);
 
       if (!jsondata.error) {
@@ -18,8 +18,8 @@ module.exports = (app) => {
       return 0;
     }
 
-    * getCountByHour(curr, next) {
-      const sqlContent = `select count(*) from access_app_tracker.app_evt-*/push where op_type='error' and op_params.t_type='1' and op_params.timestamp >= ${curr} and op_params.timestamp < ${next}`;
+    * getCountByHour(trackerType, curr, next) {
+      const sqlContent = `select count(*) from access_app_tracker.app_evt-*/push where op_type='error' and op_params.t_type=${trackerType} and op_params.timestamp >= ${curr} and op_params.timestamp < ${next}`;
       const jsondata = yield this.request(sqlContent);
 
       if (!jsondata.error) {
@@ -29,8 +29,8 @@ module.exports = (app) => {
       return 0;
     }
 
-    * getDim(date) {
-      const commonSql = `select count(*) from access_app_tracker.app_evt-${date}/push where op_type='error' and op_params.t_type='1'`;
+    * getDim(trackerType, date) {
+      const commonSql = `select count(*) from access_app_tracker.app_evt-${date}/push where op_type='error' and op_params.t_type=${trackerType}`;
       const sqlNetwork = `${commonSql} GROUP BY op_params.network`;
       const sqlPlatform = `${commonSql} GROUP BY op_params.platform`;
 
@@ -165,5 +165,5 @@ module.exports = (app) => {
       return JSON.parse(result.data.toString('utf8'));
     }
   }
-  return ErrorService;
+  return TrackerService;
 };

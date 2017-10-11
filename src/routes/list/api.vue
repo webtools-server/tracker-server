@@ -22,8 +22,23 @@
           <el-input placeholder="网络类型" v-model="filters.network"></el-input>
         </div>
         <div class="filter">
-          页面链接：
-          <el-input placeholder="页面链接" v-model="filters.link"></el-input>
+          接口地址：
+          <el-input placeholder="接口地址" v-model="filters.link"></el-input>
+        </div>
+        <div class="filter">
+          请求方法：
+          <el-select v-model="filters.method" placeholder="请选择">
+            <el-option
+              v-for="item in methods"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </div>
+        <div class="filter">
+          请求内容：
+          <el-input placeholder="请求内容" v-model="filters.body"></el-input>
         </div>
         <div class="filter">
           起止时间：
@@ -41,8 +56,9 @@
         <el-table-column prop="title" label="标题"></el-table-column>
         <el-table-column prop="platform" label="平台"></el-table-column>
         <el-table-column prop="network" width="100" label="网络类型"></el-table-column>
-        <el-table-column prop="link" width="250" label="页面链接"></el-table-column>
-        <el-table-column prop="c1" width="150" label="错误msg"></el-table-column>
+        <el-table-column prop="common.url" width="250" label="接口地址"></el-table-column>
+        <el-table-column prop="common.method" width="150" label="请求方法"></el-table-column>
+         <el-table-column prop="common.time" width="150" label="响应时间(ms)"></el-table-column>
         <el-table-column prop="timestamp" label="上报时间" :formatter="formatDate" width="180"></el-table-column>
         <el-table-column :context="_self" width="100" inline-template label="操作">
           <div>
@@ -87,40 +103,28 @@
           <el-form-item label="用户代理：">
             <span class="txt-bw">{{details.ua}}</span>
           </el-form-item>
-          <el-form-item label="自定义字段1：">
-            <span class="txt-bw">{{details.c1}}</span>
+          <el-form-item label="请求method：">
+            <span class="txt-bw">{{details.common.method}}</span>
           </el-form-item>
-          <el-form-item label="自定义字段2：">
-            <span class="txt-bw">{{details.c2}}</span>
+          <el-form-item label="请求url：">
+            <span class="txt-bw">{{details.common.url}}</span>
           </el-form-item>
-          <el-form-item label="自定义字段3：">
-            <span class="txt-bw">{{details.c3}}</span>
+          <el-form-item label="请求body：">
+            <span class="txt-bw">{{details.common.body}}</span>
           </el-form-item>
-        </el-form>
-
-        <el-form ref="iptForm" :rules="rules" class="ipt-form-box" :model="maps" label-width="200px">
-          <el-form-item label="sourcemap：" prop="link">
-            <el-input v-model="maps.link" placeholder="sourcemap地址"></el-input>
+          <el-form-item label="响应time：">
+            <span class="txt-bw">{{details.common.time}}ms</span>
           </el-form-item>
-          <el-form-item label="行号：">
-            <el-input class="small-ipt" v-model="maps.row" placeholder="行号"></el-input>
+          <el-form-item label="响应statusCode：">
+            <span class="txt-bw">{{details.common.statusCode}}</span>
           </el-form-item>
-          <el-form-item label="列号：">
-            <el-input class="small-ipt" v-model="maps.col" placeholder="列号"></el-input>
+          <el-form-item label="响应statusText：">
+            <span class="txt-bw">{{details.common.statusText}}</span>
           </el-form-item>
-
-          <el-form-item>
-            <el-button type="primary" @click="handleParse()">解 析</el-button>
-            <el-button @click="viewDialog = false">取 消</el-button>
+          <el-form-item label="响应result：">
+            <span class="txt-bw">{{details.common.result}}</span>
           </el-form-item>
         </el-form>
-
-        <el-alert
-          v-show="parseResult"
-          title="解析结果"
-          type="success"
-          :description="parseResult">
-        </el-alert>
       </el-dialog>
       <!-- view dialog end -->
     </div>
@@ -149,21 +153,29 @@ export default {
         pid: '',
         network: '',
         link: '',
+        method: '',
+        body: '',
         startEndTime: ''
       },
-      details: {},
-      maps: {
-        link: '',
-        row: 0,
-        col: 0
+      details: {
+        common: {}
       },
-      rules: {
-        link: [
-          {required: true, message: '请输入sourcemap地址', trigger: 'blur'},
-          {type: 'url', message: '格式不正确', trigger: 'blur'}
-        ]
-      },
-      parseResult: ''
+      methods: [{
+        value: 'get',
+        label: 'GET'
+      }, {
+        value: 'post',
+        label: 'POST'
+      }, {
+        value: 'put',
+        label: 'PUT'
+      }, {
+        value: 'delete',
+        label: 'DELETE'
+      }, {
+        value: 'options',
+        label: 'OPTIONS'
+      }]
     };
   },
 
@@ -175,34 +187,13 @@ export default {
     formatDate(row, column, cellValue) {
       return moment(cellValue).format('YYYY-MM-DD HH:mm:ss');
     },
+
     isInApp(row, column, cellValue) {
       return String(!!cellValue);
-    },
-    handleParse() {
-      this.$refs.iptForm.validate(valid => {
-        if (!valid) {
-          return false;
-        } else {
-          api.translate(this.maps).then((res) => {
-            if (res.code === 0) {
-              this.parseResult = JSON.stringify(res.data.origin, null, 2);
-            } else {
-              this.$message({
-                message: res.msg,
-                type: 'error'
-              });
-            }
-          });
-        }
-      });
     },
 
     handleView($index, row) {
       this.details = row;
-      this.maps = Object.assign({
-        link: sourceMap.getURL(row.c2)
-      }, sourceMap.getRowAndCol(row.c1, row.c3));
-      this.parseResult = '';
       this.viewDialog = true;
     },
 
@@ -263,12 +254,14 @@ export default {
       const page = parseInt(query.page, 10) || this.firstPage;
 
       this.loading = true;
-      api.fetchErrorList({
+      api.fetchApiList({
         page,
         platform: this.filters.platform,
         pid: this.filters.pid,
         network: this.filters.network,
         link: this.filters.link,
+        method: this.filters.method,
+        body: this.filters.body,
         startTime: startTime,
         endTime: endTime
       }).then((res) => {

@@ -20,7 +20,8 @@ const COUNT_TYPE = {
 // 采集数据类型
 const TRACKER_TYPE = {
   ERROR: '1',
-  API: '2'
+  API: '2',
+  PERF: '3'
 };
 
 // 返回码

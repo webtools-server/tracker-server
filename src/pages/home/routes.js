@@ -8,6 +8,7 @@ import NotFound from 'routes/common/404.vue';
 import Help from 'routes/help/index.vue';
 
 import ErrorComp from 'routes/list/error.vue';
+import ApiComp from 'routes/list/api.vue';
 import Dashboard from 'routes/dashboard/index.vue';
 
 const root = Vue.component('root', {
@@ -43,18 +44,18 @@ const routes = [
             component: ErrorComp,
             imgUrl: 'https://o0p2g4ul8.qnssl.com/vsite%2Fbackground.jpg'
           },
-          // {
-          //   path: 'api',
-          //   name: '接口',
-          //   component: NotFound,
-          //   imgUrl: 'https://o0p2g4ul8.qnssl.com/vsite%2Fbackground.jpg'
-          // },
-          // {
-          //   path: 'perf',
-          //   name: '性能',
-          //   component: NotFound,
-          //   imgUrl: 'https://o0p2g4ul8.qnssl.com/vsite%2Fbackground.jpg'
-          // }
+          {
+            path: 'api',
+            name: '接口',
+            component: ApiComp,
+            imgUrl: 'https://o0p2g4ul8.qnssl.com/vsite%2Fbackground.jpg'
+          },
+          {
+            path: 'perf',
+            name: '性能',
+            component: NotFound,
+            imgUrl: 'https://o0p2g4ul8.qnssl.com/vsite%2Fbackground.jpg'
+          }
         ]
       },
       {
