@@ -57,8 +57,8 @@
         <el-table-column prop="platform" label="平台"></el-table-column>
         <el-table-column prop="network" width="100" label="网络类型"></el-table-column>
         <el-table-column prop="common.url" width="250" label="接口地址"></el-table-column>
-        <el-table-column prop="common.method" width="150" label="请求方法"></el-table-column>
-         <el-table-column prop="common.time" width="150" label="响应时间(ms)"></el-table-column>
+        <el-table-column prop="common.method" label="请求方法"></el-table-column>
+         <el-table-column prop="common.time" label="响应时间(ms)"></el-table-column>
         <el-table-column prop="timestamp" label="上报时间" :formatter="formatDate" width="180"></el-table-column>
         <el-table-column :context="_self" width="100" inline-template label="操作">
           <div>
@@ -110,7 +110,7 @@
             <span class="txt-bw">{{details.common.url}}</span>
           </el-form-item>
           <el-form-item label="请求body：">
-            <span class="txt-bw">{{details.common.body}}</span>
+            <span class="txt-bw">{{details.common.body | parseBody}}</span>
           </el-form-item>
           <el-form-item label="响应time：">
             <span class="txt-bw">{{details.common.time}}ms</span>
@@ -277,6 +277,20 @@ export default {
 
   mounted() {
     this.fetchData();
+  },
+
+  filters: {
+    parseBody(str) {
+      if (str) {
+        try {
+          return JSON.parse(str);
+        } catch (e) {
+          return str;
+        }
+      }
+
+      return '';
+    }
   }
 };
 </script>
