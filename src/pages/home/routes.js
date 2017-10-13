@@ -9,6 +9,7 @@ import Help from 'routes/help/index.vue';
 
 import ErrorComp from 'routes/list/error.vue';
 import ApiComp from 'routes/list/api.vue';
+import PerfComp from 'routes/list/perf.vue';
 import Dashboard from 'routes/dashboard/index.vue';
 
 const root = Vue.component('root', {
@@ -53,7 +54,7 @@ const routes = [
           {
             path: 'perf',
             name: '性能',
-            component: NotFound,
+            component: PerfComp,
             imgUrl: 'https://o0p2g4ul8.qnssl.com/vsite%2Fbackground.jpg'
           }
         ]

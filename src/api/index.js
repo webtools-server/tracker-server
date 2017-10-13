@@ -36,6 +36,14 @@ export function fetchApiList(params) {
 }
 
 /**
+ * 获取性能数据列表
+ * @param {Object} params
+ */
+export function fetchPerfList(params) {
+  return axiosInstance.get('/query_perf', { params });
+}
+
+/**
  * sourcemap
  * @param {Object} data
  */

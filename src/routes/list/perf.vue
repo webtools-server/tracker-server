@@ -22,23 +22,8 @@
           <el-input placeholder="网络类型" v-model="filters.network"></el-input>
         </div>
         <div class="filter">
-          接口地址：
-          <el-input placeholder="接口地址" v-model="filters.link"></el-input>
-        </div>
-        <div class="filter">
-          请求方法：
-          <el-select v-model="filters.method" placeholder="请选择">
-            <el-option
-              v-for="item in methods"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value">
-            </el-option>
-          </el-select>
-        </div>
-        <div class="filter">
-          请求内容：
-          <el-input placeholder="请求内容" v-model="filters.body"></el-input>
+          页面链接：
+          <el-input placeholder="页面链接" v-model="filters.link"></el-input>
         </div>
         <div class="filter">
           起止时间：
@@ -56,9 +41,8 @@
         <el-table-column prop="title" label="标题"></el-table-column>
         <el-table-column prop="platform" label="平台"></el-table-column>
         <el-table-column prop="network" width="100" label="网络类型"></el-table-column>
-        <el-table-column prop="common.url" width="250" label="接口地址"></el-table-column>
-        <el-table-column prop="common.method" label="请求方法"></el-table-column>
-         <el-table-column prop="common.time" label="响应时间(ms)"></el-table-column>
+        <el-table-column prop="link" width="250" label="页面链接"></el-table-column>
+        <el-table-column prop="common.c1.loadTime" label="页面加载总时间(ms)"></el-table-column>
         <el-table-column prop="timestamp" label="上报时间" :formatter="formatDate" width="180"></el-table-column>
         <el-table-column :context="_self" width="100" inline-template label="操作">
           <div>
@@ -93,6 +77,22 @@
           <el-table-column prop="uniq_id" label="唯一标识"></el-table-column>
           <el-table-column prop="timestamp" label="上报时间" :formatter="formatDate" width="180"></el-table-column>
         </el-table>
+
+        <el-table class="ui-mb-30" :data="[details.common.c1]">
+          <el-table-column prop="firstPaintTime" label="首屏时间(ms)"></el-table-column>
+          <el-table-column prop="loadTime" label="页面加载总时间(ms)"></el-table-column>
+          <el-table-column prop="domReadyTime" label="DOM加载完成时间(ms)"></el-table-column>
+          <el-table-column prop="readyStart" label="准备新页面时间(ms)"></el-table-column>
+          <el-table-column prop="redirectTime" label="重定向时间(ms)"></el-table-column>
+          <el-table-column prop="appcacheTime" label="appcache时间(ms)"></el-table-column>
+          <el-table-column prop="unloadEventTime" label="unload文档时间(ms)"></el-table-column>
+          <el-table-column prop="lookupDomainTime" label="DNS查询时间(ms)"></el-table-column>
+          <el-table-column prop="connectTime" label="TCP连接时间(ms)"></el-table-column>
+          <el-table-column prop="requestTime" label="request请求时间(ms)"></el-table-column>
+          <el-table-column prop="initDomTreeTime" label="请求完毕至DOM加载时间(ms)"></el-table-column>
+          <el-table-column prop="loadEventTime" label="load事件时间(ms)"></el-table-column>
+        </el-table>
+
         <el-form :model="details" label-width="200px">
           <el-form-item label="引用：">
             <span class="txt-bw">{{details.referer}}</span>
@@ -103,26 +103,15 @@
           <el-form-item label="用户代理：">
             <span class="txt-bw">{{details.ua}}</span>
           </el-form-item>
-          <el-form-item label="请求method：">
-            <span class="txt-bw">{{details.common.method}}</span>
+          <el-form-item label="自定义字段1：">
+            <span class="txt-bw">{{details.c1}}</span>
           </el-form-item>
-          <el-form-item label="请求url：">
-            <span class="txt-bw">{{details.common.url}}</span>
+          <el-form-item label="自定义字段2：">
+            <span class="txt-bw">{{details.c2}}</span>
           </el-form-item>
-          <el-form-item label="请求body：">
-            <span class="txt-bw">{{details.common.body | parseBody}}</span>
+          <el-form-item label="自定义字段3：">
+            <span class="txt-bw">{{details.c3}}</span>
           </el-form-item>
-          <el-form-item label="响应time：">
-            <span class="txt-bw">{{details.common.time}}ms</span>
-          </el-form-item>
-          <el-form-item label="响应statusCode：">
-            <span class="txt-bw">{{details.common.statusCode}}</span>
-          </el-form-item>
-          <el-form-item label="响应statusText：">
-            <span class="txt-bw">{{details.common.statusText}}</span>
-          </el-form-item>
-          <el-form-item label="响应result：">
-            <span class="txt-bw">{{details.common.result}}</span>
           </el-form-item>
         </el-form>
       </el-dialog>
@@ -152,29 +141,11 @@ export default {
         pid: '',
         network: '',
         link: '',
-        method: '',
-        body: '',
         startEndTime: ''
       },
       details: {
         common: {}
-      },
-      methods: [{
-        value: 'get',
-        label: 'GET'
-      }, {
-        value: 'post',
-        label: 'POST'
-      }, {
-        value: 'put',
-        label: 'PUT'
-      }, {
-        value: 'delete',
-        label: 'DELETE'
-      }, {
-        value: 'options',
-        label: 'OPTIONS'
-      }]
+      }
     };
   },
 
@@ -253,14 +224,12 @@ export default {
       const page = parseInt(query.page, 10) || this.firstPage;
 
       this.loading = true;
-      api.fetchApiList({
+      api.fetchPerfList({
         page,
         platform: this.filters.platform,
         pid: this.filters.pid,
         network: this.filters.network,
         link: this.filters.link,
-        method: this.filters.method,
-        body: this.filters.body,
         startTime: startTime,
         endTime: endTime
       }).then((res) => {

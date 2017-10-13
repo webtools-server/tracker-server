@@ -23,16 +23,6 @@ const router = new VueRouter({
   linkActiveClass: 'active'
 });
 
-router.beforeEach((to, from, next) => {
-  if (to.matched.some(record => record.meta.requiresAuth)) {
-    const user = JSON.parse(localStorage.getItem('user'));
-    if (!user) {
-      next({ path: '/login', query: { redirect: to.fullPath } });
-    }
-  }
-  next();
-});
-
 new Vue({
   render: h => h(App),
   router
