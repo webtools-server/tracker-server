@@ -24,7 +24,7 @@ axiosInstance.interceptors.response.use((res) => {
  * @param {Object} params
  */
 export function fetchErrorList(params) {
-  return axiosInstance.get('/query_error', { params });
+  return axiosInstance.get('/error/query', { params });
 }
 
 /**
@@ -32,7 +32,7 @@ export function fetchErrorList(params) {
  * @param {Object} params
  */
 export function fetchApiList(params) {
-  return axiosInstance.get('/query_api', { params });
+  return axiosInstance.get('/api/query', { params });
 }
 
 /**
@@ -40,7 +40,7 @@ export function fetchApiList(params) {
  * @param {Object} params
  */
 export function fetchPerfList(params) {
-  return axiosInstance.get('/query_perf', { params });
+  return axiosInstance.get('/perf/query', { params });
 }
 
 /**
@@ -48,26 +48,47 @@ export function fetchPerfList(params) {
  * @param {Object} data
  */
 export function translate(data = {}) {
-  return axiosInstance.post('/translate', data);
+  return axiosInstance.post('/error/translate', data);
 }
 
 /**
  * 根据日期统计，默认获取7天
  */
-export function getCountByDate(params) {
-  return axiosInstance.get('/count/date', { params });
+export function errorStatByDay() {
+  return axiosInstance.get('/error/stat_by_day');
 }
 
 /**
  * 根据小时统计
  */
-export function getCountByHour(params) {
-  return axiosInstance.get('/count/hour', { params });
+export function errorStatByHour() {
+  return axiosInstance.get('/error/stat_by_hour');
 }
 
 /**
  * 根据维度统计
  */
-export function getCountByDim(params) {
-  return axiosInstance.get('/count/dim', { params });
+export function errorStatByDim() {
+  return axiosInstance.get('/error/stat_by_dim');
+}
+
+/**
+ * 根据日期统计，默认获取7天
+ */
+export function apiStatByDay() {
+  return axiosInstance.get('/api/stat_by_day');
+}
+
+/**
+ * 根据小时统计
+ */
+export function apiStatByHour() {
+  return axiosInstance.get('/api/stat_by_hour');
+}
+
+/**
+ * 根据维度统计
+ */
+export function apiStatByDim() {
+  return axiosInstance.get('/api/stat_by_dim');
 }

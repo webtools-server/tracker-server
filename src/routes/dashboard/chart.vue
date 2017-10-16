@@ -34,11 +34,14 @@
 
 <script>
 import echarts from 'echarts';
-import * as api from '../../api';
 
 export default {
   data() {
     return {
+      day: { el: null, title: '' },
+      hour: { el: null, title: '' },
+      platform: { el: null, title: '' },
+      network: { el: null, title: '' }
     };
   },
   props: {
@@ -53,6 +56,30 @@ export default {
     chartType: {
       type: String,
       default: ''
+    },
+    statDay: {
+      type: Array,
+      default() { return []; }
+    },
+    statHour: {
+      type: Array,
+      default() { return []; }
+    },
+    statDim: {
+      type: Object,
+      default() { return {}; }
+    }
+  },
+  watch: {
+    statDay(val) {
+      this.setChartBarOptions(this.day.el, this.day.title, val);
+    },
+    statHour(val) {
+      this.setChartLineOptions(this.hour.el, this.hour.title, val);
+    },
+    statDim(val) {
+      this.setChartPieOptions(this.platform.el, this.platform.title, val.platform);
+      this.setChartPieOptions(this.network.el, this.network.title, val.network);
     }
   },
   methods: {
@@ -139,37 +166,23 @@ export default {
   },
   mounted() {
     // 按天统计（最新7天）
-    const chartCountDate = echarts.init(document.querySelector(`#${this.chartID} .chart-count-date`));
-    const chartCountDateTitle = '按天统计（最新7天）';
-
-    this.setChartBarOptions(chartCountDate, chartCountDateTitle, []);
-    api.getCountByDate({ t_type: this.chartType }).then((res) => {
-      this.setChartBarOptions(chartCountDate, chartCountDateTitle, res.data);
-    });
+    this.day.el = echarts.init(document.querySelector(`#${this.chartID} .chart-count-date`));
+    this.day.title = '按天统计（最新7天）';
+    this.setChartBarOptions(this.day.el, this.day.title, this.statDay);
 
     // 按小时统计
-    const chartCountHour = echarts.init(document.querySelector(`#${this.chartID} .chart-count-hour`));
-    const chartCountHourTitle = '按小时统计';
-
-    this.setChartLineOptions(chartCountHour, chartCountHourTitle, []);
-    api.getCountByHour({ t_type: this.chartType }).then((res) => {
-      this.setChartLineOptions(chartCountHour, chartCountHourTitle, res.data);
-    });
+    this.hour.el = echarts.init(document.querySelector(`#${this.chartID} .chart-count-hour`));
+    this.hour.title = '按小时统计';
+    this.setChartLineOptions(this.hour.el, this.hour.title, this.statHour);
 
     // 按维度统计
-    const chartPlatform = echarts.init(document.querySelector(`#${this.chartID} .chart-platform`));
-    const chartNetwork = echarts.init(document.querySelector(`#${this.chartID} .chart-network`));
-    const chartPlatformTitle = '平台';
-    const chartNetworkTitle = '网络类型';
+    this.platform.el = echarts.init(document.querySelector(`#${this.chartID} .chart-platform`));
+    this.network.el = echarts.init(document.querySelector(`#${this.chartID} .chart-network`));
+    this.platform.title = '平台';
+    this.network.title = '网络类型';
 
-    this.setChartPieOptions(chartPlatform, chartPlatformTitle, []);
-    this.setChartPieOptions(chartNetwork, chartNetworkTitle, []);
-    api.getCountByDim({ t_type: this.chartType }).then((res) => {
-      const jsondata = res.data;
-
-      this.setChartPieOptions(chartPlatform, chartPlatformTitle, jsondata.platform);
-      this.setChartPieOptions(chartNetwork, chartNetworkTitle, jsondata.network);
-    });
+    this.setChartPieOptions(this.platform.el, this.platform.title, []);
+    this.setChartPieOptions(this.network.el, this.network.title, []);
   }
 };
 </script>

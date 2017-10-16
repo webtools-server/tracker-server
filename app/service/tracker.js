@@ -2,11 +2,50 @@
  * tracker service
  */
 
+const moment = require('moment');
 const util = require('../common/util');
 const { QUERY_URL } = require('../common/config');
 
 module.exports = (app) => {
   class TrackerService extends app.Service {
+    * statByDay(trackerType, day) {
+      let current = moment().day();
+      const dayArr = new Array(day);
+
+      while (day) {
+        day--;
+        const d = moment().day(current--).format('YYYY.MM.DD');
+        dayArr[day] = {
+          date: d,
+          count: yield this.getCountByDate(trackerType, d)
+        };
+      }
+
+      return dayArr;
+    }
+
+    * statByHour(trackerType, hour) {
+      const year = moment().year();
+      const month = moment().month();
+      const date = moment().date();
+      const hourArr = new Array(hour);
+      let currHour = '';
+      let nextHour = '';
+
+      while (hour) {
+        nextHour = moment([year, month, date, hour]);
+        hour--;
+        currHour = moment([year, month, date, hour]);
+
+        hourArr[hour] = {
+          time: currHour.format('HH:mm'),
+          count: yield this.getCountByHour(trackerType, currHour.valueOf(), nextHour.valueOf())
+        };
+      }
+
+      return hourArr;
+    }
+
     * getCountByDate(trackerType, date) {
       const sqlContent = `select count(*) from access_app_tracker.app_evt-${date}/push where op_type='error' and op_params.t_type=${trackerType}`;
       const jsondata = yield this.request(sqlContent);

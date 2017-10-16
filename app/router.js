@@ -9,9 +9,16 @@ module.exports = (app) => {
   app.post('/auth/check', 'auth.check');
 
   // api v1
-  app.get('/api/v1/query_error', 'apiV1.queryError');
-  app.get('/api/v1/query_api', 'apiV1.queryApi');
-  app.get('/api/v1/query_perf', 'apiV1.queryPerf');
-  app.post('/api/v1/translate', 'apiV1.translate');
-  app.get('/api/v1/count/:type', 'apiV1.count');
+  app.get('/api/v1/error/query', 'apiV1.error.query');
+  app.get('/api/v1/error/stat_by_day/:day?', 'apiV1.error.statByDay');
+  app.get('/api/v1/error/stat_by_hour/:hour?', 'apiV1.error.statByHour');
+  app.get('/api/v1/error/stat_by_dim', 'apiV1.error.statByDim');
+  app.post('/api/v1/error/translate', 'apiV1.error.translate');
+
+  app.get('/api/v1/api/query', 'apiV1.api.query');
+  app.get('/api/v1/api/stat_by_day/:day?', 'apiV1.api.statByDay');
+  app.get('/api/v1/api/stat_by_hour/:hour?', 'apiV1.api.statByHour');
+  app.get('/api/v1/api/stat_by_dim', 'apiV1.api.statByDim');
+
+  app.get('/api/v1/perf/query', 'apiV1.perf.query');
 };
