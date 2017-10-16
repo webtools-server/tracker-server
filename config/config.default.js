@@ -33,5 +33,14 @@ module.exports = (appInfo) => {
     }
   };
 
+  config.sequelize = {
+    dialect: 'mysql', // support: mysql, mariadb, postgres, mssql
+    database: '',
+    host: 'localhost',
+    port: '3306',
+    username: '',
+    password: '',
+  };
+
   return config;
 };
