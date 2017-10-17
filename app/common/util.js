@@ -40,7 +40,7 @@ function str2Obj(str = '', sep = ';', subSep = ':') {
 
 /**
  * 是否对象
- * @param {Object} obj
+ * @param {Any} obj
  * @return {Boolean}
  */
 function isObject(obj) {
@@ -49,11 +49,29 @@ function isObject(obj) {
 
 /**
  * 是否字符串
- * @param {String} str
+ * @param {Any} str
  * @return {Boolean}
  */
 function isString(str) {
   return toStr.call(str) === '[object String]';
+}
+
+/**
+ * 是否布尔值
+ * @param {Any} bool
+ * @return {Boolean}
+ */
+function isBoolean(bool) {
+  return toStr.call(bool) === '[object Boolean]';
+}
+
+/**
+ * 是否错误类型
+ * @param {Object} ex
+ * @return {Boolean}
+ */
+function isError(ex) {
+  return toStr.call(ex) === '[object Error]';
 }
 
 /**
@@ -67,6 +85,8 @@ function hasOwnProp(obj, k) {
 
 module.exports = {
   isObject,
+  isBoolean,
+  isError,
   hasOwnProp,
   md5,
   str2Obj

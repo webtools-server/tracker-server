@@ -21,4 +21,9 @@ module.exports = (app) => {
   app.get('/api/v1/api/stat_by_dim', 'apiV1.api.statByDim');
 
   app.get('/api/v1/perf/query', 'apiV1.perf.query');
+
+  app.post('/api/v1/project', 'apiV1.project.createOne');
+  app.delete('/api/v1/project/:pid', 'apiV1.project.deleteOne');
+  app.put('/api/v1/project/:pid', 'apiV1.project.putOne');
+  app.get('/api/v1/project/:pid?', 'apiV1.project.query');
 };
