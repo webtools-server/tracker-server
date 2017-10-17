@@ -22,6 +22,7 @@ cp -vr "$workdir/public" "$releasedir/public"
 
 cp -v "$workdir/package.json" "$releasedir/package.json"
 cp -v "$workdir/index.js" "$releasedir/index.js"
+cp -v "$workdir/app.js" "$releasedir/app.js"
 
 # release
 echo "entering $releasedir & scp"
