@@ -11,7 +11,7 @@
       <div class="filters" @keyup.enter="handleSearch">
         <div class="filter">
           产品ID：
-          <el-input placeholder="产品ID" v-model="filters.pid"></el-input>
+          <tk-project-select v-model="filters.pid"></tk-project-select>
         </div>
         <div class="filter">
           平台：

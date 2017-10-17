@@ -7,6 +7,7 @@ import VueRouter from 'vue-router';
 import ElementUI from 'element-ui';
 
 import Breadcrumb from 'components/breadcrumb.vue';
+import ProjectSelect from 'components/project_select.vue';
 
 import App from './app.vue';
 import routes from './routes';
@@ -16,6 +17,7 @@ Vue.use(VueRouter);
 Vue.use(ElementUI);
 
 Vue.component('db-breadcrumb', Breadcrumb);
+Vue.component('tk-project-select', ProjectSelect);
 
 const router = new VueRouter({
   routes,

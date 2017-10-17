@@ -92,3 +92,40 @@ export function apiStatByHour() {
 export function apiStatByDim() {
   return axiosInstance.get('/api/stat_by_dim');
 }
+
+/**
+ * 查询项目
+ * @param {String|Obejct} [params]
+ */
+export function queryProject(params) {
+  if (typeof params === 'string') {
+    return axiosInstance.get(`/project/${params}`);
+  }
+
+  return axiosInstance.get('/project', { params });
+}
+
+/**
+ * 创建项目
+ * @param {Object} data
+ */
+export function createProject(data = {}) {
+  return axiosInstance.post('/project', data);
+}
+
+/**
+ * 修改项目信息
+ * @param {String} pid
+ * @param {Object} data
+ */
+export function saveProject(pid, data = {}) {
+  return axiosInstance.put(`/project/${pid}`, data);
+}
+
+/**
+ * 删除项目信息
+ * @param {String} pid
+ */
+export function deleteProject(pid) {
+  return axiosInstance.delete(`/project/${pid}`);
+}
