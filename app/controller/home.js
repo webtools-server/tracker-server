@@ -6,7 +6,7 @@ module.exports = (app) => {
   class HomeController extends app.Controller {
     * index() {
       yield this.ctx.render('home.html', {
-        title: 'tracker',
+        title: '前端监控系统',
         viewState: {
           user: { username: this.ctx.session.username }
         }

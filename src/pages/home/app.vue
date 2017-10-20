@@ -5,15 +5,17 @@
       <header class="db-header">
         <router-link class="logo" :to="{path: '/'}">tracker</router-link>
         <div class="user-info" v-if="user.username">
-          <span v-text="user.username"></span>
           <el-dropdown trigger="click">
-            <span class="el-dropdown-link">
-              <img class="avatar" :src="user.avatar">
+            <span class="el-dropdown-link color-white">
+              {{user.username}}<i class="el-icon-caret-bottom el-icon--right"></i>
             </span>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item @click.native="logout">注销</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
+          <span class="el-dropdown-link">
+            <img class="avatar" :src="user.avatar">
+          </span>
         </div>
       </header>
       <!-- header end  -->
@@ -23,7 +25,7 @@
 
         <!-- menu start -->
         <aside class="db-menu-wrapper">
-          <el-menu :default-active="activeMenu" theme="dark" class="db-menu-bar" router>
+          <el-menu :default-active="activeMenu" theme="light" class="db-menu-bar" router>
             <template v-for="(route, index) in $router.options.routes[$router.options.routes.length - 2].children">
               <template v-if="route.children && route.name">
                 <el-submenu :index="route.name">
@@ -105,11 +107,15 @@ export default {
     border-radius: 50%;
   }
 
+  .color-white {
+    color: #fff;
+  }
+
   // header
   .db-header {
     width: 100%;
     height: 60px;
-    background: #20A0FF;
+    background: #324157;
     padding: 13px 20px;
     box-sizing: border-box;
     color: #ffffff;
