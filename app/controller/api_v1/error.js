@@ -8,6 +8,7 @@ const query = require('../../common/query');
 const { PAGE_NUM } = require('../../common/config');
 const {
   SQL_CONDITION_TYPE,
+  FILTER_TYPE,
   TRACKER_TYPE,
   RET_CODE
 } = require('../../common/enum');
@@ -69,7 +70,8 @@ module.exports = (app) => {
           { name: 'network', type: SQL_CONDITION_TYPE.LIKE },
           { name: 'link', type: SQL_CONDITION_TYPE.LIKE },
           { name: 'startTime', compare: 'timestamp', type: SQL_CONDITION_TYPE.GTE },
-          { name: 'endTime', compare: 'timestamp', type: SQL_CONDITION_TYPE.LTE }
+          { name: 'endTime', compare: 'timestamp', type: SQL_CONDITION_TYPE.LTE },
+          { name: 'filterError', like: 'c1', type: getSqlConditionTypeByFilterType(ctx.query.filterType) }
         ]
       );
 
@@ -135,3 +137,14 @@ module.exports = (app) => {
   }
   return ErrorController;
 };
+
+function getSqlConditionTypeByFilterType(type) {
+  switch (type) {
+    case FILTER_TYPE.CONTAIN:
+      return SQL_CONDITION_TYPE.LIKE;
+    case FILTER_TYPE.NOT_CONTRAIN:
+      return SQL_CONDITION_TYPE.NOT_LIKE;
+    default:
+      return '';
+  }
+}

@@ -134,7 +134,12 @@ module.exports = (app) => {
         if (util.isObject(curr)) {
           // like
           if (util.hasOwnProp(curr, '$like')) {
-            sqlCondition.push(`${c} like '${curr.$like}'`);
+            sqlCondition.push(`${c} like '${curr.$like.toLowerCase()}'`);
+          }
+
+          // not like
+          if (util.hasOwnProp(curr, '$notLike')) {
+            sqlCondition.push(`${c} not like '${curr.$notLike.toLowerCase()}'`);
           }
 
           // gte

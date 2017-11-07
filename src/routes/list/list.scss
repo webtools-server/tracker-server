@@ -29,11 +29,25 @@
       .el-select {
         display: inline-block;
       }
+
+      .el-input {
+        width: 150px;
+      }
     }
 
-    .el-input {
-      width: 150px;
+    .middle-filter {
       display: inline-block;
+      width: auto;
+      padding: 10px;
+      border-radius: 5px;
+
+      .ui-d-ib {
+        display: inline-block;
+      }
+
+      .el-select {
+        width: 100px;
+      }
     }
   }
 

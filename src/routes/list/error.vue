@@ -25,6 +25,17 @@
           页面链接：
           <el-input placeholder="页面链接" v-model="filters.link"></el-input>
         </div>
+        <div class="middle-filter">
+          过滤错误：
+          <div class="ui-d-ib">
+            <el-input placeholder="错误msg" v-model="filters.filterError">
+              <el-select v-model="filters.filterType" slot="prepend" placeholder="请选择">
+                <el-option label="包含" value="1"></el-option>
+                <el-option label="不包含" value="2"></el-option>
+              </el-select>
+            </el-input>
+          </div>
+        </div>
         <div class="filter">
           起止时间：
           <el-date-picker type="datetimerange" placeholder="选择时间范围" style="width:350px" v-model="filters.startEndTime"></el-date-picker>
@@ -149,7 +160,9 @@ export default {
         pid: '',
         network: '',
         link: '',
-        startEndTime: ''
+        startEndTime: '',
+        filterType: '',
+        filterError: ''
       },
       details: {},
       maps: {
@@ -269,6 +282,8 @@ export default {
         pid: this.filters.pid,
         network: this.filters.network,
         link: this.filters.link,
+        filterType: this.filters.filterType,
+        filterError: this.filters.filterError,
         startTime: startTime,
         endTime: endTime
       }).then((res) => {

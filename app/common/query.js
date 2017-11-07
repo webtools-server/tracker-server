@@ -27,6 +27,14 @@ function getConditionByQuery(query, fields) {
           }
           break;
         }
+        case SQL_CONDITION_TYPE.NOT_LIKE: {
+          if (field.like) {
+            arr.push([`op_params.${field.like}`, { $notLike: `%${(fields.prefix || '') + currentField}%` }]);
+          } else {
+            arr.push([`op_params.${field.name}`, { $notLike: `%${currentField}%` }]);
+          }
+          break;
+        }
         case SQL_CONDITION_TYPE.GTE: {
           arr.push([`op_params.${field.compare}`, { $gte: currentField }]);
           break;

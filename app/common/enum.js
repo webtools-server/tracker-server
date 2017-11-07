@@ -6,8 +6,15 @@
 const SQL_CONDITION_TYPE = {
   NORMAL: 0, // 普通
   LIKE: 1, // like
-  GTE: 2, // 大于等于
-  LTE: 3 // 小于等于
+  NOT_LIKE: 2, // not like
+  GTE: 3, // 大于等于
+  LTE: 4 // 小于等于
+};
+
+// filter类型
+const FILTER_TYPE = {
+  CONTAIN: '1',
+  NOT_CONTRAIN: '2'
 };
 
 // 采集数据类型
@@ -25,6 +32,7 @@ const RET_CODE = {
 
 module.exports = {
   SQL_CONDITION_TYPE,
+  FILTER_TYPE,
   TRACKER_TYPE,
   RET_CODE
 };
