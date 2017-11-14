@@ -19,6 +19,6 @@ $ npm run release
 ### 部署
 
 ```bash
-$ npm start
-$ npm stop
+$ npm run pm2 // 启动
+$ npm run restart // 重启
 ```

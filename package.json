@@ -31,8 +31,11 @@
     "node": ">=6.0.0"
   },
   "scripts": {
-    "start": "egg-scripts start --daemon --port=7002",
-    "stop": "egg-scripts stop",
+    "pm2": "pm2 start index.js --name \"tracker\"",
+    "restart": "pm2 restart tracker",
+    "start": "NODE_ENV=production node index.js",
+    "start:scripts": "egg-scripts start --daemon --port=7002",
+    "stop:scripts": "egg-scripts stop",
     "dev": "egg-bin dev --port=7002",
     "watch": "jfet build -w",
     "build": "jfet build",
