@@ -8,7 +8,7 @@
               <img :src="route.imgUrl" type="image/webp">
             </div>
             <div class="text">
-              <p>{{route.name}}</p>
+              <p>{{route.meta.title}}</p>
               <router-link :to="{name: route.name}">查看</router-link>
             </div>
           </div>

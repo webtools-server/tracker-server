@@ -25,17 +25,17 @@
 
         <!-- menu start -->
         <aside class="db-menu-wrapper">
-          <el-menu :default-active="activeMenu" theme="light" class="db-menu-bar" router>
+          <el-menu :default-active="activeMenu" theme="light" :unique-opened="uniqueOpened" class="db-menu-bar" router>
             <template v-for="(route, index) in $router.options.routes[$router.options.routes.length - 2].children">
               <template v-if="route.children && route.name">
                 <el-submenu :index="route.name">
-                  <template slot="title"><i :class="route.iconClass"></i>{{route.name}}</template>
-                  <el-menu-item :index="cRoute.name" v-for="(cRoute, cIndex) in route.children" :route="cRoute">{{cRoute.name}}</el-menu-item>
+                  <template slot="title"><i :class="route.iconClass"></i>{{route.title}}</template>
+                  <el-menu-item :index="cRoute.name" v-for="(cRoute, cIndex) in route.children" :route="cRoute">{{cRoute.title}}</el-menu-item>
                 </el-submenu>
               </template>
 
               <template v-if="!route.children && route.name">
-                <el-menu-item :index="route.name" :route="route"><i :class="route.iconClass"></i>{{route.name}}</el-menu-item>
+                <el-menu-item :index="route.name" :route="route"><i :class="route.iconClass"></i>{{route.title}}</el-menu-item>
               </template>
             </template>
           </el-menu>
@@ -69,7 +69,8 @@ export default {
         username: '',
         avatar: avatarImg
       },
-      activeMenu: ''
+      activeMenu: '',
+      uniqueOpened: true
     };
   },
   created() {

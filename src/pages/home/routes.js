@@ -22,7 +22,8 @@ const routes = [
   {
     path: '/404',
     component: NotFound,
-    name: '404'
+    name: '404',
+    title: '404'
   },
   {
     path: '/',
@@ -32,25 +33,29 @@ const routes = [
       {
         path: 'dashboard',
         component: Dashboard,
-        name: '仪表盘',
+        name: 'dashboard',
+        title: '仪表盘',
         iconClass: 'el-icon-fa-tachometer'
       },
       {
         path: 'project',
         component: Abstract,
-        name: '项目',
+        name: 'project',
+        title: '项目',
         iconClass: 'el-icon-fa-product-hunt',
         children: [
           {
             path: 'create',
-            name: '新建/编辑',
+            name: 'projectCreate',
+            title: '新建/编辑',
             component: ProjectCreate,
             imgUrl: 'https://o0p2g4ul8.qnssl.com/vsite%2Fbackground.jpg'
           },
           {
             path: 'list',
             component: ProjectList,
-            name: '列表',
+            name: 'projectList',
+            title: '列表',
             imgUrl: 'https://o0p2g4ul8.qnssl.com/vsite%2Fbackground.jpg'
           }
         ]
@@ -58,18 +63,21 @@ const routes = [
       {
         path: 'error',
         component: Abstract,
-        name: '错误',
+        name: 'error',
+        title: '错误',
         iconClass: 'el-icon-fa-exclamation-circle',
         children: [
           {
-            path: 'errorStat',
-            name: '统计',
+            path: 'stat',
+            name: 'errorStat',
+            title: '统计',
             component: ErrorComp,
             imgUrl: 'https://o0p2g4ul8.qnssl.com/vsite%2Fbackground.jpg'
           },
           {
-            path: 'errorDetail',
-            name: '明细',
+            path: 'detail',
+            name: 'errorDetail',
+            title: '明细',
             component: ErrorComp,
             imgUrl: 'https://o0p2g4ul8.qnssl.com/vsite%2Fbackground.jpg'
           }
@@ -78,18 +86,21 @@ const routes = [
       {
         path: 'api',
         component: Abstract,
-        name: '接口',
+        name: 'api',
+        title: '接口',
         iconClass: 'el-icon-fa-database',
         children: [
+          // {
+          //   path: 'stat',
+          //   name: 'apiStat',
+          //   title: '统计',
+          //   component: ApiComp,
+          //   imgUrl: 'https://o0p2g4ul8.qnssl.com/vsite%2Fbackground.jpg'
+          // },
           {
-            path: 'apiStat',
-            name: '统计',
-            component: ApiComp,
-            imgUrl: 'https://o0p2g4ul8.qnssl.com/vsite%2Fbackground.jpg'
-          },
-          {
-            path: 'apiDetail',
-            name: '明细',
+            path: 'detail',
+            name: 'apiDetail',
+            title: '明细',
             component: ApiComp,
             imgUrl: 'https://o0p2g4ul8.qnssl.com/vsite%2Fbackground.jpg'
           }
@@ -98,18 +109,21 @@ const routes = [
       {
         path: 'perf',
         component: Abstract,
-        name: '性能',
+        name: 'perf',
+        title: '性能',
         iconClass: 'el-icon-fa-percent',
         children: [
+          // {
+          //   path: 'stat',
+          //   name: 'perfStat',
+          //   title: '统计',
+          //   component: PerfComp,
+          //   imgUrl: 'https://o0p2g4ul8.qnssl.com/vsite%2Fbackground.jpg'
+          // },
           {
-            path: 'perfStat',
-            name: '统计',
-            component: PerfComp,
-            imgUrl: 'https://o0p2g4ul8.qnssl.com/vsite%2Fbackground.jpg'
-          },
-          {
-            path: 'perfDetail',
-            name: '明细',
+            path: 'detail',
+            name: 'perfDetail',
+            title: '明细',
             component: PerfComp,
             imgUrl: 'https://o0p2g4ul8.qnssl.com/vsite%2Fbackground.jpg'
           }
@@ -118,7 +132,8 @@ const routes = [
       {
         path: 'help',
         component: Help,
-        name: '帮助',
+        name: 'help',
+        title: '帮助',
         iconClass: 'el-icon-fa-question-circle'
       }
     ]
@@ -128,12 +143,25 @@ const routes = [
     redirect: { path: '/404' }
   }
 ];
+
 const menuCount = routes.length;
+
+addMetaTitle(routes);
 routes[menuCount - 2].children.forEach((route) => {
   if (route.children) {
     if (!route.meta) route.meta = {};
     route.meta.children = route.children;
   }
 });
+
+function addMetaTitle(arr) {
+  if (Array.isArray(arr)) {
+    arr.forEach((a) => {
+      if (!a.meta) a.meta = {};
+      if (a.title) a.meta.title = a.title;
+      if (Array.isArray(a.children)) addMetaTitle(a.children);
+    });
+  }
+}
 
 export default routes;
