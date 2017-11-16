@@ -20,6 +20,9 @@ module.exports = {
         routes: path.join(__dirname, 'src/routes'),
         components: path.join(__dirname, 'src/components')
       },
+      sass: {
+        includePaths: ['node_modules']
+      },
       defineConstants: {}
     });
 

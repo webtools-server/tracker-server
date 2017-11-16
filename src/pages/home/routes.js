@@ -33,13 +33,13 @@ const routes = [
         path: 'dashboard',
         component: Dashboard,
         name: '仪表盘',
-        iconClass: 'el-icon-view'
+        iconClass: 'el-icon-fa-tachometer'
       },
       {
         path: 'project',
         component: Abstract,
-        name: '我的项目',
-        iconClass: 'el-icon-star-off',
+        name: '项目',
+        iconClass: 'el-icon-fa-product-hunt',
         children: [
           {
             path: 'create',
@@ -56,26 +56,60 @@ const routes = [
         ]
       },
       {
-        path: 'list',
+        path: 'error',
         component: Abstract,
-        name: '数据列表',
-        iconClass: 'el-icon-document',
+        name: '错误',
+        iconClass: 'el-icon-fa-exclamation-circle',
         children: [
           {
-            path: 'error',
-            name: '错误',
+            path: 'errorStat',
+            name: '统计',
             component: ErrorComp,
             imgUrl: 'https://o0p2g4ul8.qnssl.com/vsite%2Fbackground.jpg'
           },
           {
-            path: 'api',
-            name: '接口',
+            path: 'errorDetail',
+            name: '明细',
+            component: ErrorComp,
+            imgUrl: 'https://o0p2g4ul8.qnssl.com/vsite%2Fbackground.jpg'
+          }
+        ]
+      },
+      {
+        path: 'api',
+        component: Abstract,
+        name: '接口',
+        iconClass: 'el-icon-fa-database',
+        children: [
+          {
+            path: 'apiStat',
+            name: '统计',
             component: ApiComp,
             imgUrl: 'https://o0p2g4ul8.qnssl.com/vsite%2Fbackground.jpg'
           },
           {
-            path: 'perf',
-            name: '性能',
+            path: 'apiDetail',
+            name: '明细',
+            component: ApiComp,
+            imgUrl: 'https://o0p2g4ul8.qnssl.com/vsite%2Fbackground.jpg'
+          }
+        ]
+      },
+      {
+        path: 'perf',
+        component: Abstract,
+        name: '性能',
+        iconClass: 'el-icon-fa-percent',
+        children: [
+          {
+            path: 'perfStat',
+            name: '统计',
+            component: PerfComp,
+            imgUrl: 'https://o0p2g4ul8.qnssl.com/vsite%2Fbackground.jpg'
+          },
+          {
+            path: 'perfDetail',
+            name: '明细',
             component: PerfComp,
             imgUrl: 'https://o0p2g4ul8.qnssl.com/vsite%2Fbackground.jpg'
           }
@@ -85,7 +119,7 @@ const routes = [
         path: 'help',
         component: Help,
         name: '帮助',
-        iconClass: 'el-icon-information'
+        iconClass: 'el-icon-fa-question-circle'
       }
     ]
   },
