@@ -7,9 +7,11 @@ import Abstract from 'routes/common/abstract.vue';
 import NotFound from 'routes/common/404.vue';
 import Help from 'routes/help/index.vue';
 
-import ErrorComp from 'routes/list/error.vue';
-import ApiComp from 'routes/list/api.vue';
-import PerfComp from 'routes/list/perf.vue';
+import ErrorDetailComp from 'routes/error/detail.vue';
+import ApiStatComp from 'routes/api/stat.vue';
+import ApiDetailComp from 'routes/api/detail.vue';
+import PerfDetailComp from 'routes/perf/detail.vue';
+
 import Dashboard from 'routes/dashboard/index.vue';
 import ProjectList from 'routes/project/list.vue';
 import ProjectCreate from 'routes/project/create.vue';
@@ -67,18 +69,18 @@ const routes = [
         title: '错误',
         iconClass: 'el-icon-fa-exclamation-circle',
         children: [
-          {
-            path: 'stat',
-            name: 'errorStat',
-            title: '统计',
-            component: ErrorComp,
-            imgUrl: 'https://o0p2g4ul8.qnssl.com/vsite%2Fbackground.jpg'
-          },
+          // {
+          //   path: 'stat',
+          //   name: 'errorStat',
+          //   title: '统计',
+          //   component: ErrorStatComp,
+          //   imgUrl: 'https://o0p2g4ul8.qnssl.com/vsite%2Fbackground.jpg'
+          // },
           {
             path: 'detail',
             name: 'errorDetail',
             title: '明细',
-            component: ErrorComp,
+            component: ErrorDetailComp,
             imgUrl: 'https://o0p2g4ul8.qnssl.com/vsite%2Fbackground.jpg'
           }
         ]
@@ -90,18 +92,18 @@ const routes = [
         title: '接口',
         iconClass: 'el-icon-fa-database',
         children: [
-          // {
-          //   path: 'stat',
-          //   name: 'apiStat',
-          //   title: '统计',
-          //   component: ApiComp,
-          //   imgUrl: 'https://o0p2g4ul8.qnssl.com/vsite%2Fbackground.jpg'
-          // },
+          {
+            path: 'stat',
+            name: 'apiStat',
+            title: '统计',
+            component: ApiStatComp,
+            imgUrl: 'https://o0p2g4ul8.qnssl.com/vsite%2Fbackground.jpg'
+          },
           {
             path: 'detail',
             name: 'apiDetail',
             title: '明细',
-            component: ApiComp,
+            component: ApiDetailComp,
             imgUrl: 'https://o0p2g4ul8.qnssl.com/vsite%2Fbackground.jpg'
           }
         ]
@@ -117,14 +119,14 @@ const routes = [
           //   path: 'stat',
           //   name: 'perfStat',
           //   title: '统计',
-          //   component: PerfComp,
+          //   component: PerfStatComp,
           //   imgUrl: 'https://o0p2g4ul8.qnssl.com/vsite%2Fbackground.jpg'
           // },
           {
             path: 'detail',
             name: 'perfDetail',
             title: '明细',
-            component: PerfComp,
+            component: PerfDetailComp,
             imgUrl: 'https://o0p2g4ul8.qnssl.com/vsite%2Fbackground.jpg'
           }
         ]

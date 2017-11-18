@@ -139,7 +139,7 @@
 </template>
 
 <script>
-import './list.scss';
+import '../../assets/sass/list.scss';
 
 import * as api from '../../api';
 import moment from 'moment';
