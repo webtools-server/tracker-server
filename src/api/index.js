@@ -20,7 +20,7 @@ axiosInstance.interceptors.response.use((res) => {
 });
 
 /**
- * 获取列表
+ * 获取明细列表
  * @param {Object} params
  */
 export function fetchErrorList(params) {
@@ -28,11 +28,19 @@ export function fetchErrorList(params) {
 }
 
 /**
- * 获取API列表
+ * 获取API明细列表
  * @param {Object} params
  */
 export function fetchApiList(params) {
   return axiosInstance.get('/api/query', { params });
+}
+
+/**
+ * 获取API统计列表
+ * @param {Object} params
+ */
+export function fetchApiStatList(params) {
+  return axiosInstance.get('/api/query_stat', { params });
 }
 
 /**

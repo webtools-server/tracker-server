@@ -8,15 +8,15 @@
     <div class="db-content-inner">
       <!-- filters start -->
       <div class="filters" @keyup.enter="handleSearch">
-        <div class="filter">
+        <!-- <div class="filter">
           时间：
           <el-radio-group v-model="daterange">
-            <el-radio-button :label="today">今天</el-radio-button>
-            <el-radio-button :label="lastday">昨天</el-radio-button>
-            <el-radio-button :label="day7">最近7天</el-radio-button>
-            <el-radio-button :label="day30">最近30天</el-radio-button>
+            <el-radio-button label="今天"></el-radio-button>
+            <el-radio-button label="昨天"></el-radio-button>
+            <el-radio-button label="最近7天"></el-radio-button>
+            <el-radio-button label="最近30天"></el-radio-button>
           </el-radio-group>
-        </div>
+        </div> -->
         <div class="filter">
           对比时间段：
           <el-date-picker type="datetimerange" placeholder="选择时间范围" style="width:250px" v-model="filters.startEndTime"></el-date-picker>
@@ -34,7 +34,6 @@
           <el-input placeholder="网络类型" v-model="filters.network"></el-input>
         </div>
         <el-button type="primary" @click="handleSearch()">查询</el-button>
-        <el-button type="success" @click="handleSearch()">计算报表</el-button>
       </div>
       <!-- filters end -->
 
@@ -42,17 +41,17 @@
       <el-table :data="list" ref="table" style="width: 100%" element-loading-text="拼命加载中"
         stripe
         v-loading="loading">
-        <el-table-column prop="pid" label="产品ID"></el-table-column>
-        <el-table-column prop="title" label="接口地址"></el-table-column>
-        <el-table-column prop="platform" label="平台"></el-table-column>
-        <el-table-column prop="network" width="100" label="网络类型"></el-table-column>
-        <el-table-column prop="common.url" width="250" label="接口地址"></el-table-column>
-        <el-table-column prop="common.method" label="请求方法"></el-table-column>
-         <el-table-column prop="common.time" label="响应时间(ms)"></el-table-column>
-        <el-table-column prop="timestamp" label="上报时间" :formatter="formatDate" width="180"></el-table-column>
+        <el-table-column prop="url" width="250" label="接口地址"></el-table-column>
+        <el-table-column prop="cmd" width="100" label="命令字"></el-table-column>
+        <el-table-column prop="responseTotal" label="请求次数"></el-table-column>
+        <el-table-column prop="timeoutCount" label="超时次数"></el-table-column>
+        <el-table-column prop="statusCodeCount" label="状态码错误次数"></el-table-column>
+        <el-table-column prop="apiCodeCount" label="apiCode错误次数"></el-table-column>
+        <el-table-column prop="averageResponseTime" label="平均响应时长(ms)"></el-table-column>
+        <el-table-column prop="slowResponseTime" label="最慢响应时长(ms)"></el-table-column>
         <el-table-column :context="_self" width="100" inline-template label="操作">
           <div>
-            <el-button type="info" size="small" @click="handleView($index, row)">查看</el-button>
+            <el-button type="info" size="small" @click="handleView($index, row)">明细</el-button>
           </div>
         </el-table-column>
       </el-table>
@@ -88,35 +87,13 @@ export default {
       page: 1,
       pageSize: 0,
       loading: true,
-      daterange: 'today',
+      daterange: '',
       filters: {
         platform: '',
         pid: '',
         network: '',
-        link: '',
-        method: '',
-        body: '',
         startEndTime: ''
-      },
-      details: {
-        common: {}
-      },
-      methods: [{
-        value: 'get',
-        label: 'GET'
-      }, {
-        value: 'post',
-        label: 'POST'
-      }, {
-        value: 'put',
-        label: 'PUT'
-      }, {
-        value: 'delete',
-        label: 'DELETE'
-      }, {
-        value: 'options',
-        label: 'OPTIONS'
-      }]
+      }
     };
   },
 
@@ -129,13 +106,11 @@ export default {
       return moment(cellValue).format('YYYY-MM-DD HH:mm:ss');
     },
 
-    isInApp(row, column, cellValue) {
-      return String(!!cellValue);
-    },
-
     handleView($index, row) {
-      this.details = row;
-      this.viewDialog = true;
+      this.$router.push({
+        name: 'apiDetail',
+        query: { body: row.cmd }
+      });
     },
 
     handleSearch() {
@@ -195,14 +170,11 @@ export default {
       const page = parseInt(query.page, 10) || this.firstPage;
 
       this.loading = true;
-      api.fetchApiList({
+      api.fetchApiStatList({
         page,
         platform: this.filters.platform,
         pid: this.filters.pid,
         network: this.filters.network,
-        link: this.filters.link,
-        method: this.filters.method,
-        body: this.filters.body,
         startTime: startTime,
         endTime: endTime
       }).then((res) => {
@@ -218,20 +190,6 @@ export default {
 
   mounted() {
     this.fetchData();
-  },
-
-  filters: {
-    parseBody(str) {
-      if (str) {
-        try {
-          return JSON.parse(str);
-        } catch (e) {
-          return str;
-        }
-      }
-
-      return '';
-    }
   }
 };
 </script>
