@@ -4,7 +4,10 @@
 
 const moment = require('moment');
 const util = require('../common/util');
-const { QUERY_URL } = require('../common/config');
+const { QUERY_URL, MAX_LIMIT } = require('../common/config');
+
+// 数据缓存
+let cache = null;
 
 module.exports = (app) => {
   class TrackerService extends app.Service {
@@ -113,6 +116,34 @@ module.exports = (app) => {
       }
     }
 
+    * getAllData(type) {
+      // 如果有缓存，直接返回
+      if (cache) {
+        return cache;
+      }
+
+      const sqlObj = {
+        where: [
+          ['op_type', 'error'],
+          ['op_params.t_type', type]
+        ],
+        limit: MAX_LIMIT,
+        order: [['@timestamp', 'desc']]
+      };
+      const jsondata = yield this.ctx.service.tracker.query(sqlObj);
+
+      if (!jsondata.error) {
+        // 数据缓存起来
+        cache = {
+          total: jsondata.hits.total,
+          list: jsondata.hits.hits
+        };
+        return cache;
+      }
+
+      return { total: 0, list: [] };
+    }
+
     * query(sqlObj) {
       const sqlStr = 'select * from access_app_tracker.app_evt-*/push';
 
@@ -204,6 +235,7 @@ module.exports = (app) => {
       const result = yield this.ctx.curl(QUERY_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        timeout: 1000 * 60 * 3, // 3分钟超时
         content: sql
       });
       return JSON.parse(result.data.toString('utf8'));

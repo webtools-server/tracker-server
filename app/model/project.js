@@ -16,6 +16,14 @@ module.exports = (app) => {
       comment: '产品ID',
       unique: true
     },
+    max_limit: {
+      type: INTEGER,
+      comment: '列表最大值'
+    },
+    api_threshold: {
+      type: INTEGER,
+      comment: '超时响应时间'
+    },
     title: {
       type: STRING,
       comment: '产品名称'

@@ -83,11 +83,57 @@ function hasOwnProp(obj, k) {
   return hasOwn.call(obj, k);
 }
 
+/**
+ * 解析为json格式
+ * @param {Object} json
+ */
+function parseJson(json) {
+  try {
+    const res = JSON.parse(json);
+    if (!isObject(res)) {
+      return parseJson(res);
+    }
+    return res;
+  } catch (e) {
+    return {};
+  }
+}
+
+/**
+ * 获取URL路径
+ * @param {String}
+ * @return {String}
+ */
+function getUrlPath(urlStr) {
+  return String(urlStr).slice(0, urlStr.indexOf('?'));
+}
+
+/**
+ * 根据_key从对象数组中查找对象
+ * @param {Array} arr
+ * @param {Any} key
+ * @return {Number} 成功返回数组下标，失败返回-1
+ */
+function findIndexFromObjArray(arr, key) {
+  if (!Array.isArray(arr)) return -1;
+
+  for (let i = 0, l = arr.length; i < l; i++) {
+    if (arr[i]._key === key) {
+      return i;
+    }
+  }
+
+  return -1;
+}
+
 module.exports = {
   isObject,
   isBoolean,
   isError,
   hasOwnProp,
   md5,
-  str2Obj
+  str2Obj,
+  parseJson,
+  getUrlPath,
+  findIndexFromObjArray
 };
