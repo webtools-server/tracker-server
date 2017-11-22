@@ -100,8 +100,8 @@ module.exports = (app) => {
           if (platform && opPlatform.indexOf(platform) > -1) return;
           if (network && opNetwork.indexOf(network) > -1) return;
           if (pid && opParams.pid !== pid) return;
-          if (!isNaN(startTime) && startTime > 0 && cParams.time < startTime) return;
-          if (!isNaN(endTime) && endTime > 0 && cParams.time > endTime) return;
+          if (!isNaN(startTime) && startTime > 0 && opParams.timestamp < startTime) return;
+          if (!isNaN(endTime) && endTime > 0 && opParams.timestamp > endTime) return;
 
           const cpBody = util.parseJson(cParams.body);
           const cpUrl = util.getUrlPath(cParams.url);
