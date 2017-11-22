@@ -6,7 +6,7 @@
 const PAGE_NUM = 10;
 
 // 列表最大值
-const MAX_LIMIT = 5000;
+const MAX_LIMIT = 10000;
 
 // 接口响应时间超过该值的时候上报
 const API_THRESHOLD = 3000;

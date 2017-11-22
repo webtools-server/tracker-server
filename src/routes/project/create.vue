@@ -14,6 +14,10 @@
            <el-input placeholder="请输入产品名称" v-model="form.title"></el-input>
         </el-form-item>
 
+        <el-form-item label="超时响应时间" prop="apiThreshold">
+           <el-input placeholder="请输入超时响应时间(ms)" v-model="form.apiThreshold"></el-input>
+        </el-form-item>
+
         <el-form-item>
           <el-button type="primary" @click="handleSubmit">保存</el-button>
         </el-form-item>
@@ -26,12 +30,15 @@
 <script>
 import * as api from '../../api';
 
+const API_THRESHOLD = 3000;
+
 export default {
   data() {
     return {
       form: {
         pid: '',
         title: '',
+        apiThreshold: API_THRESHOLD
       },
       rules: {
         pid: [
@@ -55,8 +62,11 @@ export default {
           this.$message({ message: res.msg, type: 'error' });
           this.$router.push({ path: '/project/list' });
         } else {
-          this.form.pid = res.data.pid;
-          this.form.title = res.data.title;
+          const resData = res.data;
+
+          this.form.pid = resData.pid;
+          this.form.title = resData.title;
+          this.form.apiThreshold = resData.api_threshold;
         }
       });
     }

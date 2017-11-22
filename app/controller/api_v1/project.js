@@ -10,7 +10,7 @@ module.exports = (app) => {
   class ProjectController extends app.Controller {
     * createOne() {
       const ctx = this.ctx;
-      const { pid, title } = ctx.request.body;
+      const { pid, title, apiThreshold } = ctx.request.body;
 
       if (!pid || !title) {
         ctx.body = { code: RET_CODE.ERROR, msg: 'pid或者title不能为空' };
@@ -20,6 +20,7 @@ module.exports = (app) => {
       const result = yield ctx.service.project.createOne({
         pid,
         title,
+        api_threshold: apiThreshold,
         owner: ctx.session.username
       });
 
@@ -80,7 +81,7 @@ module.exports = (app) => {
 
     * putOne() {
       const ctx = this.ctx;
-      const { pid, title } = ctx.request.body;
+      const { pid, title, apiThreshold } = ctx.request.body;
 
       if (!pid || !title) {
         ctx.body = { code: RET_CODE.ERROR, msg: 'pid或者title不能为空' };
@@ -89,7 +90,11 @@ module.exports = (app) => {
 
       const result = yield ctx.service.project.updateOneByPid(
         ctx.params.pid,
-        { pid, title }
+        {
+          pid,
+          title,
+          api_threshold: apiThreshold
+        }
       );
 
       if (!util.isError(result)) {
