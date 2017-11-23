@@ -10,7 +10,7 @@ exports.schedule = {
   immediate: process.env.NODE_ENV === 'production' // production环境下应用启动的时候，立即执行
 };
 
-exports.task = function* () {
-  this.ctx.logger.info('获取API错误数据');
-  yield this.ctx.service.tracker.getAllData(TRACKER_TYPE.API);
+exports.task = function* (ctx) {
+  ctx.logger.info('获取API错误数据');
+  yield ctx.service.tracker.getAllData(TRACKER_TYPE.API);
 };
