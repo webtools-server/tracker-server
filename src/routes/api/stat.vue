@@ -37,18 +37,24 @@
       </div>
       <!-- filters end -->
 
+      <!-- chart start -->
+      <div class="chart-main">
+        <div id="line-chart"></div>
+      </div>
+      <!-- chart end -->
+
       <!-- table start  -->
       <el-table :data="list" ref="table" style="width: 100%" element-loading-text="拼命加载中"
         stripe
         v-loading="loading">
         <el-table-column prop="url" width="250" label="接口地址"></el-table-column>
         <el-table-column prop="cmd" width="100" label="命令字"></el-table-column>
-        <el-table-column prop="responseTotal" label="请求次数"></el-table-column>
-        <el-table-column prop="timeoutCount" label="超时次数"></el-table-column>
-        <el-table-column prop="statusCodeCount" label="状态码错误次数"></el-table-column>
-        <el-table-column prop="apiCodeCount" label="apiCode错误次数"></el-table-column>
-        <el-table-column prop="averageResponseTime" label="平均响应时长(ms)"></el-table-column>
-        <el-table-column prop="slowResponseTime" label="最慢响应时长(ms)"></el-table-column>
+        <el-table-column prop="responseTotal" :label="apiFields.responseTotal"></el-table-column>
+        <el-table-column prop="timeoutCount" :label="apiFields.timeoutCount"></el-table-column>
+        <el-table-column prop="statusCodeCount" :label="apiFields.statusCodeCount"></el-table-column>
+        <el-table-column prop="apiCodeCount" :label="apiFields.apiCodeCount"></el-table-column>
+        <el-table-column prop="averageResponseTime" :label="apiFields.averageResponseTime"></el-table-column>
+        <el-table-column prop="slowResponseTime" :label="apiFields.slowResponseTime"></el-table-column>
         <el-table-column :context="_self" width="100" inline-template label="操作">
           <div>
             <el-button type="info" size="small" @click="handleView($index, row)">明细</el-button>
@@ -76,11 +82,16 @@
 import '../../assets/sass/list.scss';
 
 import * as api from '../../api';
+import { apiFields } from '../../utils/fields_map';
+import echarts from 'echarts';
 import moment from 'moment';
 
 export default {
   data() {
     return {
+      apiFields,
+      lineChart: null,
+      chartData: [], // 图表数据
       firstPage: 1,
       list: [],
       total: 0,
@@ -168,15 +179,32 @@ export default {
 
       // param: page
       const page = parseInt(query.page, 10) || this.firstPage;
-
-      this.loading = true;
-      api.fetchApiStatList({
-        page,
+      const commonParams = {
         platform: this.filters.platform,
         pid: this.filters.pid,
         network: this.filters.network,
         startTime: startTime,
         endTime: endTime
+      };
+
+      api.queryStatByTime(commonParams).then((res) => {
+        if (res.code === 0) {
+          this.chartData = res.data;
+          this.setChartOption(
+            this.chartData,
+            [
+              'responseTotal',
+              'timeoutCount',
+              'statusCodeCount',
+              'apiCodeCount'
+            ]
+          );
+        }
+      });
+
+      this.loading = true;
+      api.fetchApiStatList({
+        ...commonParams, page
       }).then((res) => {
         // lazy render data
         this.list = res.data.list;
@@ -185,11 +213,58 @@ export default {
         this.pageSize = res.data.pageSize;
         this.loading = false;
       });
+    },
+
+    setChartOption(chartData = [], legend = []) {
+      const xAxis = chartData.map(d => d.xAxis);
+
+      this.lineChart.setOption({
+        title: {
+          text: ''
+        },
+        tooltip: {
+          trigger: 'axis'
+        },
+        legend: {
+          data: legend.map(l => apiFields[l] || '')
+        },
+        toolbox: {
+          show: true,
+          feature: {
+            saveAsImage: { show: true }
+          }
+        },
+        xAxis: {
+          type: 'category',
+          boundaryGap: false,
+          data: xAxis
+        },
+        yAxis: {
+          type: 'value'
+        },
+        series: legend.map(l => {
+          return {
+            name: apiFields[l],
+            type: 'line',
+            smooth: true,
+            data: chartData.map(d => d[l])
+          };
+        })
+      });
     }
   },
 
   mounted() {
+    //  折线图
+    this.lineChart = echarts.init(document.getElementById('line-chart'));
     this.fetchData();
   }
 };
 </script>
+
+<style lang="scss" scoped>
+  #line-chart {
+    height: 350px;
+    margin-bottom: 25px;
+  }
+</style>

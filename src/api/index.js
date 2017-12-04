@@ -44,6 +44,14 @@ export function fetchApiStatList(params) {
 }
 
 /**
+ * 按照时间段统计
+ * @param {Object} params
+ */
+export function queryStatByTime(params) {
+  return axiosInstance.get('/api/query_stat_by_time', { params });
+}
+
+/**
  * 获取性能数据列表
  * @param {Object} params
  */

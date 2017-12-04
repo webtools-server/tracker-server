@@ -17,6 +17,7 @@ module.exports = (app) => {
 
   app.get('/api/v1/api/query', 'apiV1.api.query');
   app.get('/api/v1/api/query_stat', 'apiV1.api.queryStat');
+  app.get('/api/v1/api/query_stat_by_time', 'apiV1.api.queryStatByTime');
   app.get('/api/v1/api/stat_by_day/:day?', 'apiV1.api.statByDay');
   app.get('/api/v1/api/stat_by_hour/:hour?', 'apiV1.api.statByHour');
   app.get('/api/v1/api/stat_by_dim', 'apiV1.api.statByDim');
