@@ -12,5 +12,5 @@ exports.schedule = {
 
 exports.task = function* (ctx) {
   ctx.logger.info('获取API错误数据');
-  yield ctx.service.tracker.getAllData(TRACKER_TYPE.API);
+  yield ctx.service.tracker.getAllData(TRACKER_TYPE.API, true);
 };

@@ -116,9 +116,9 @@ module.exports = (app) => {
       }
     }
 
-    * getAllData(type) {
-      // 如果有缓存，直接返回
-      if (cache) {
+    * getAllData(type, isNew = false) {
+      // 如果不需要重新获取，并且有缓存，直接返回
+      if (!isNew && cache) {
         return cache;
       }
 
