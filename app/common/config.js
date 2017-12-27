@@ -12,7 +12,7 @@ const MAX_LIMIT = 10000;
 const API_THRESHOLD = 3000;
 
 // 接口地址
-const QUERY_URL = 'http://61.174.8.209:9009/_sql';
+const QUERY_URL = 'http://120.132.109.152:9009/_sql';
 
 module.exports = {
   PAGE_NUM,

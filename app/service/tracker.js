@@ -233,10 +233,11 @@ module.exports = (app) => {
       }
 
       const result = yield this.ctx.curl(QUERY_URL, {
-        method: 'POST',
+        method: 'GET',
         headers: { 'Content-Type': 'application/json' },
         timeout: 1000 * 60 * 3, // 3分钟超时
-        content: sql
+        data: { sql },
+        dataAsQueryString: true
       });
       return JSON.parse(result.data.toString('utf8'));
     }
