@@ -23,7 +23,7 @@
         v-loading="loading">
         <el-table-column prop="pid" label="产品ID"></el-table-column>
         <el-table-column prop="title" label="产品名称"></el-table-column>
-        <el-table-column prop="created_at" label="修改时间" :formatter="formatDate"></el-table-column>
+        <el-table-column prop="updated_at" label="修改时间" :formatter="formatDate"></el-table-column>
         <el-table-column :context="_self" inline-template label="操作">
           <div>
             <el-button type="info" size="small" @click="handleEdit($index, row)">编辑</el-button>
