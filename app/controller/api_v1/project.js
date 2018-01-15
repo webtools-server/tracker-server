@@ -10,7 +10,7 @@ module.exports = (app) => {
   class ProjectController extends app.Controller {
     * createOne() {
       const ctx = this.ctx;
-      const { pid, title, apiThreshold } = ctx.request.body;
+      const { pid, title, apiThreshold, slowResponseTime } = ctx.request.body;
 
       if (!pid || !title) {
         ctx.body = { code: RET_CODE.ERROR, msg: 'pid或者title不能为空' };
@@ -21,6 +21,7 @@ module.exports = (app) => {
         pid,
         title,
         api_threshold: apiThreshold,
+        slow_response_time: slowResponseTime,
         owner: ctx.session.username
       });
 
@@ -81,7 +82,7 @@ module.exports = (app) => {
 
     * putOne() {
       const ctx = this.ctx;
-      const { pid, title, apiThreshold } = ctx.request.body;
+      const { pid, title, apiThreshold, slowResponseTime } = ctx.request.body;
 
       if (!pid || !title) {
         ctx.body = { code: RET_CODE.ERROR, msg: 'pid或者title不能为空' };
@@ -93,7 +94,8 @@ module.exports = (app) => {
         {
           pid,
           title,
-          api_threshold: apiThreshold
+          api_threshold: apiThreshold,
+          slow_response_time: slowResponseTime
         }
       );
 

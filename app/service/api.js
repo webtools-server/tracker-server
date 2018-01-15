@@ -4,7 +4,7 @@
 
 const util = require('../common/util');
 const { TRACKER_TYPE } = require('../common/enum');
-const { API_THRESHOLD } = require('../common/config');
+const { API_THRESHOLD, SLOW_RESPONSE_TIME } = require('../common/config');
 
 module.exports = (app) => {
   class ApiStatService extends app.Service {
@@ -87,10 +87,12 @@ module.exports = (app) => {
             currentData = totalData;
           }
 
-          // 总响应时长
-          currentData.responseTimeTotal += cParams.time;
-          // 总响应次数
-          currentData.responseTotal++;
+          if (cParams.time <= SLOW_RESPONSE_TIME) {
+            // 总响应时长
+            currentData.responseTimeTotal += cParams.time;
+            // 总响应次数
+            currentData.responseTotal++;
+          }
 
           // 总超时次数
           if (cParams.time > apiThreshold) {

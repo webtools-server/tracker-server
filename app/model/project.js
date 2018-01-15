@@ -20,6 +20,10 @@ module.exports = (app) => {
       type: INTEGER,
       comment: '超时响应时间'
     },
+    slow_response_time: {
+      type: INTEGER,
+      comment: '最慢响应时间'
+    },
     title: {
       type: STRING,
       comment: '产品名称'

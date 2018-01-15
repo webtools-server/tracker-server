@@ -5,7 +5,7 @@
     <!-- breadcrumb end  -->
 
     <div class="db-content-inner" @keyup.enter="handleSubmit">
-      <el-form :rules="rules" ref="form" :model="form" label-width="100px">
+      <el-form :rules="rules" ref="form" :model="form" label-width="120px">
         <el-form-item label="产品ID" prop="pid">
            <el-input :disabled="!isCreate" placeholder="请输入产品ID" v-model="form.pid"></el-input>
         </el-form-item>
@@ -16,6 +16,10 @@
 
         <el-form-item label="超时响应时间" prop="apiThreshold">
            <el-input placeholder="请输入超时响应时间(ms)" v-model="form.apiThreshold"></el-input>
+        </el-form-item>
+
+        <el-form-item label="最慢响应时间" prop="slowResponseTime">
+           <el-input placeholder="请输入最慢响应时间(ms)" v-model="form.slowResponseTime"></el-input>
         </el-form-item>
 
         <el-form-item>
@@ -31,6 +35,7 @@
 import * as api from '../../api';
 
 const API_THRESHOLD = 3000;
+const SLOW_RESPONSE_TIME = 10000;
 
 export default {
   data() {
@@ -38,7 +43,8 @@ export default {
       form: {
         pid: '',
         title: '',
-        apiThreshold: API_THRESHOLD
+        apiThreshold: API_THRESHOLD,
+        slowResponseTime: SLOW_RESPONSE_TIME
       },
       rules: {
         pid: [
@@ -67,6 +73,7 @@ export default {
           this.form.pid = resData.pid;
           this.form.title = resData.title;
           this.form.apiThreshold = resData.api_threshold;
+          this.form.slowResponseTime = resData.slow_response_time;
         }
       });
     }
