@@ -3,7 +3,6 @@
  */
 
 const util = require('../common/util');
-const { TRACKER_TYPE } = require('../common/enum');
 const { API_THRESHOLD, SLOW_RESPONSE_TIME } = require('../common/config');
 
 module.exports = (app) => {
@@ -105,7 +104,7 @@ module.exports = (app) => {
           }
 
           // api code错误次数
-          if (cParams.resultCode || cParams.resultMsg) {
+          if (opParams.c3) {
             currentData.apiCodeCount++;
           }
 
