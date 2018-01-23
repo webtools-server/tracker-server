@@ -15,6 +15,7 @@ import PerfDetailComp from 'routes/perf/detail.vue';
 import Dashboard from 'routes/dashboard/index.vue';
 import ProjectList from 'routes/project/list.vue';
 import ProjectCreate from 'routes/project/create.vue';
+import ProjectAlert from 'routes/project/alert.vue';
 
 const root = Vue.component('root', {
   template: '<router-view></router-view>'
@@ -58,6 +59,14 @@ const routes = [
             component: ProjectList,
             name: 'projectList',
             title: '列表',
+            imgUrl: 'https://o0p2g4ul8.qnssl.com/vsite%2Fbackground.jpg'
+          },
+          {
+            path: 'alert',
+            component: ProjectAlert,
+            name: 'projectAlert',
+            title: '告警',
+            hidden: true,
             imgUrl: 'https://o0p2g4ul8.qnssl.com/vsite%2Fbackground.jpg'
           }
         ]

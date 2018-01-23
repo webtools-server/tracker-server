@@ -26,11 +26,11 @@
         <!-- menu start -->
         <aside class="db-menu-wrapper">
           <el-menu :default-active="activeMenu" theme="light" :unique-opened="uniqueOpened" class="db-menu-bar" router>
-            <template v-for="(route, index) in $router.options.routes[$router.options.routes.length - 2].children">
+            <template v-for="(route) in $router.options.routes[$router.options.routes.length - 2].children">
               <template v-if="route.children && route.name">
                 <el-submenu :index="route.name">
                   <template slot="title"><i :class="route.iconClass"></i>{{route.title}}</template>
-                  <el-menu-item :index="cRoute.name" v-for="(cRoute, cIndex) in route.children" :route="cRoute">{{cRoute.title}}</el-menu-item>
+                  <el-menu-item :index="cRoute.name" v-for="(cRoute, cIndex) in route.children" v-if="!cRoute.hidden" :route="cRoute">{{cRoute.title}}</el-menu-item>
                 </el-submenu>
               </template>
 

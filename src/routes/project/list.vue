@@ -28,6 +28,7 @@
           <div>
             <el-button type="info" size="small" @click="handleEdit($index, row)">编辑</el-button>
             <el-button type="danger" size="small" @click="handleDelete($index, row)">删除</el-button>
+            <el-button type="warning" size="small" @click="handleAlert($index, row)">告警</el-button>
           </div>
         </el-table-column>
       </el-table>
@@ -85,7 +86,11 @@ export default {
     },
 
     handleEdit(index, row) {
-      this.$router.push({ path: `/project/create`, query: { pid: row.pid } });
+      this.$router.push({ path: '/project/create', query: { pid: row.pid } });
+    },
+
+    handleAlert(index, row) {
+      this.$router.push({ path: '/project/alert', query: { pid: row.pid } });
     },
 
     handleDelete(index, row) {

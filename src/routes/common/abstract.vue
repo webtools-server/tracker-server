@@ -1,7 +1,7 @@
 <template lang="html">
   <div class="abstract">
     <el-row v-if="children">
-      <el-col :xs="10" :sm="8" :md="6" :lg="4" v-for="(route, index) in children" :offset="index > 0 ? 2 : 0">
+      <el-col :xs="10" :sm="8" :md="6" :lg="4" v-for="(route, index) in children" v-if="!route.hidden" :offset="index > 0 ? 2 : 0">
         <el-card :body-style="{ padding: '0px' }">
           <div class="card-wrapper">
             <div class="img">
