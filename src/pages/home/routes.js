@@ -72,6 +72,29 @@ const routes = [
         ]
       },
       {
+        path: 'user',
+        component: Abstract,
+        name: 'user',
+        title: '用户',
+        iconClass: 'el-icon-fa-user-circle-o',
+        children: [
+          {
+            path: 'create',
+            name: 'userCreate',
+            title: '新建/编辑',
+            component: ProjectCreate,
+            imgUrl: 'https://o0p2g4ul8.qnssl.com/vsite%2Fbackground.jpg'
+          },
+          {
+            path: 'list',
+            component: ProjectList,
+            name: 'userList',
+            title: '列表',
+            imgUrl: 'https://o0p2g4ul8.qnssl.com/vsite%2Fbackground.jpg'
+          }
+        ]
+      },
+      {
         path: 'error',
         component: Abstract,
         name: 'error',

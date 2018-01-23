@@ -10,7 +10,8 @@
               {{user.username}}<i class="el-icon-caret-bottom el-icon--right"></i>
             </span>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item @click.native="logout">注销</el-dropdown-item>
+              <el-dropdown-item>个人信息</el-dropdown-item>
+              <el-dropdown-item @click.native="logout">注销登录</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
           <span class="el-dropdown-link">
