@@ -9,11 +9,9 @@ module.exports = (app) => {
   class ProjectService extends app.Service {
     * createOne(data) {
       const proj = yield this.findOneByPid(data.pid);
-
       if (proj) {
         return new Error(`${data.pid}已经存在`);
       }
-
       return yield this.ctx.model.Project.create(data);
     }
 

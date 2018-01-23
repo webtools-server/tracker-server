@@ -19,6 +19,18 @@ module.exports = (app) => {
     password: {
       type: STRING,
       comment: '密码'
+    },
+    email: {
+      type: STRING,
+      comment: '邮箱'
+    },
+    weixin: {
+      type: STRING,
+      comment: '微信ID'
+    },
+    is_admin: {
+      type: INTEGER,
+      comment: '是否管理员'
     }
   }, {
     tableName: 'user',
