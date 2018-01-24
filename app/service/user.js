@@ -5,14 +5,21 @@
 const util = require('../common/util');
 const { PAGE_NUM } = require('../common/config');
 
+// 查询需要的字段
+const attributes = ['id', 'username', 'email', 'weixin', 'created_at', 'updated_at'];
+
 module.exports = (app) => {
   class UserService extends app.Service {
     * createOne(data) {
       return yield this.ctx.model.User.create(data);
     }
 
+    * findOne(params = {}) {
+      return yield this.ctx.model.User.findOne({ attributes, where: params });
+    }
+
     * findOneById(id) {
-      return (yield this.ctx.model.User.findOne({ where: { id } }));
+      return yield this.ctx.model.User.findOne({ where: { id } });
     }
 
     * findAndCountAll(where, offset, limit, order) {
@@ -31,6 +38,7 @@ module.exports = (app) => {
       }
 
       return yield this.ctx.model.User.findAndCountAll({
+        attributes,
         where,
         offset,
         limit: limit || PAGE_NUM,
