@@ -145,3 +145,53 @@ export function saveProject(pid, data = {}) {
 export function deleteProject(pid) {
   return axiosInstance.delete(`/project/${pid}`);
 }
+
+/**
+ * 创建用户
+ * @param {Object} data
+ */
+export function createUser(data = {}) {
+  return axiosInstance.post('/user', data);
+}
+
+/**
+ * 根据用户ID查询用户信息
+ * @param {String} id
+ */
+export function queryUser(id) {
+  return axiosInstance.get(`/user/${id}`);
+}
+
+/**
+ * 查询用户列表
+ * @param {Obejct} params
+ */
+export function fetchUserList(params) {
+  return axiosInstance.get('/user', { params });
+}
+
+/**
+ * 修改用户信息
+ * @param {String} id
+ * @param {Object} data
+ */
+export function saveUser(id, data = {}) {
+  return axiosInstance.put(`/user/${id}`, data);
+}
+
+/**
+ * 修改用户密码
+ * @param {String} id
+ * @param {Object} data
+ */
+export function changePwd(id, data = {}) {
+  return axiosInstance.put(`/user/${id}/changepwd`, data);
+}
+
+/**
+ * 删除用户
+ * @param {String} id
+ */
+export function deleteUser(id) {
+  return axiosInstance.delete(`/user/${id}`);
+}

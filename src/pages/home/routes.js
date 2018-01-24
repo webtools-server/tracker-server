@@ -13,9 +13,14 @@ import ApiDetailComp from 'routes/api/detail.vue';
 import PerfDetailComp from 'routes/perf/detail.vue';
 
 import Dashboard from 'routes/dashboard/index.vue';
+
 import ProjectList from 'routes/project/list.vue';
 import ProjectCreate from 'routes/project/create.vue';
 import ProjectAlert from 'routes/project/alert.vue';
+
+import UserList from 'routes/user/list.vue';
+import UserCreate from 'routes/user/create.vue';
+import UserChangePwd from 'routes/user/changepwd.vue';
 
 const root = Vue.component('root', {
   template: '<router-view></router-view>'
@@ -81,15 +86,31 @@ const routes = [
           {
             path: 'create',
             name: 'userCreate',
-            title: '新建/编辑',
-            component: ProjectCreate,
+            title: '新建',
+            component: UserCreate,
+            imgUrl: 'https://o0p2g4ul8.qnssl.com/vsite%2Fbackground.jpg'
+          },
+          {
+            path: 'edit/:id',
+            name: 'userEdit',
+            title: '编辑',
+            component: UserCreate,
+            hidden: true,
             imgUrl: 'https://o0p2g4ul8.qnssl.com/vsite%2Fbackground.jpg'
           },
           {
             path: 'list',
-            component: ProjectList,
+            component: UserList,
             name: 'userList',
             title: '列表',
+            imgUrl: 'https://o0p2g4ul8.qnssl.com/vsite%2Fbackground.jpg'
+          },
+          {
+            path: 'changepwd/:id',
+            component: UserChangePwd,
+            name: 'UserChangePwd',
+            title: '修改密码',
+            hidden: true,
             imgUrl: 'https://o0p2g4ul8.qnssl.com/vsite%2Fbackground.jpg'
           }
         ]
