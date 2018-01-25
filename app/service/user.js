@@ -27,7 +27,10 @@ module.exports = (app) => {
 
       // 如果第一个参数为布尔值，返回所有数据
       if (util.isBoolean(where)) {
-        return yield this.ctx.model.User.findAndCountAll({ order: defaultOrder });
+        return yield this.ctx.model.User.findAndCountAll({
+          attributes,
+          order: defaultOrder
+        });
       }
 
       if (!util.isObject(where)) {

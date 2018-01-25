@@ -31,6 +31,10 @@ module.exports = (app) => {
     owner: {
       type: STRING,
       comment: '创建用户'
+    },
+    alert_user: {
+      type: STRING,
+      comment: '告警用户ID列表'
     }
   }, {
     tableName: 'project',

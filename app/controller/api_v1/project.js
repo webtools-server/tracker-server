@@ -105,6 +105,24 @@ module.exports = (app) => {
         ctx.body = { code: RET_CODE.ERROR, msg: result.toString() };
       }
     }
+
+    /**
+     * 修改告警用户列表
+     */
+    * putAlertUser() {
+      const ctx = this.ctx;
+      const { alertUser } = ctx.request.body;
+      const result = yield ctx.service.project.updateOneByPid(
+        ctx.params.pid,
+        { alert_user: alertUser || '' }
+      );
+
+      if (!util.isError(result)) {
+        ctx.body = { code: RET_CODE.OK, data: result };
+      } else {
+        ctx.body = { code: RET_CODE.ERROR, msg: result.toString() };
+      }
+    }
   }
 
   return ProjectController;
