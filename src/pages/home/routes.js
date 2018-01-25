@@ -67,7 +67,7 @@ const routes = [
             imgUrl: 'https://o0p2g4ul8.qnssl.com/vsite%2Fbackground.jpg'
           },
           {
-            path: 'alert',
+            path: 'alert/:pid',
             component: ProjectAlert,
             name: 'projectAlert',
             title: '告警',

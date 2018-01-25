@@ -139,6 +139,15 @@ export function saveProject(pid, data = {}) {
 }
 
 /**
+ * 修改项目告警联系人
+ * @param {String} id
+ * @param {Object} data
+ */
+export function saveAlertRuleUser(pid, data = {}) {
+  return axiosInstance.put(`/project/alert_user/${pid}`, data);
+}
+
+/**
  * 删除项目信息
  * @param {String} pid
  */
@@ -194,4 +203,37 @@ export function changePwd(id, data = {}) {
  */
 export function deleteUser(id) {
   return axiosInstance.delete(`/user/${id}`);
+}
+
+/**
+ * 创建告警规则
+ * @param {Object} data
+ */
+export function createAlertRule(data = {}) {
+  return axiosInstance.post('/alert_rule', data);
+}
+
+/**
+ * 修改告警规则
+ * @param {String} id
+ * @param {Object} data
+ */
+export function saveAlertRule(id, data = {}) {
+  return axiosInstance.put(`/alert_rule/${id}`, data);
+}
+
+/**
+ * 根据项目ID查询告警规则
+ * @param {String} id
+ */
+export function queryAlertRuleByPid(id) {
+  return axiosInstance.get(`/alert_rule/project/${id}`);
+}
+
+/**
+ * 删除告警规则
+ * @param {String} id
+ */
+export function deleteAlertRule(id) {
+  return axiosInstance.delete(`/alert_rule/${id}`);
 }

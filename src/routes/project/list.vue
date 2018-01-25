@@ -90,7 +90,7 @@ export default {
     },
 
     handleAlert(index, row) {
-      this.$router.push({ path: '/project/alert', query: { pid: row.pid } });
+      this.$router.push({ path: `/project/alert/${row.pid}` });
     },
 
     handleDelete(index, row) {
