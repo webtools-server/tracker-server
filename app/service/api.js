@@ -7,6 +7,24 @@ const { API_THRESHOLD, SLOW_RESPONSE_TIME } = require('../common/config');
 
 module.exports = (app) => {
   class ApiStatService extends app.Service {
+    * query(sqlObj) {
+      const jsondata = yield this.ctx.service.tracker.query(sqlObj);
+      return {
+        error: jsondata.error,
+        total: jsondata.hits.total,
+        list: jsondata.hits.hits.map((d) => {
+          const curr = d._source.op_params;
+          const commonFields = this.parseCommonFields(curr);
+          // 解析得到的通用字段都增加"c_"前缀
+          Object.keys(commonFields).forEach((field) => {
+            curr[`c_${field}`] = commonFields[field];
+          });
+          curr.common = commonFields;
+          return curr;
+        })
+      };
+    }
+
     /**
      * 解析公共字段
      */

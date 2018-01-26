@@ -4,7 +4,6 @@
 
 const moment = require('moment');
 const query = require('../../common/query');
-const util = require('../../common/util');
 const { PAGE_NUM } = require('../../common/config');
 const {
   SQL_CONDITION_TYPE,
@@ -59,19 +58,10 @@ module.exports = (app) => {
         ctx.body = {
           code: RET_CODE.OK,
           data: {
-            total: jsondata.hits.total,
+            total: jsondata.total,
             currPage: page,
             pageSize: PAGE_NUM,
-            list: jsondata.hits.hits.map((d) => {
-              const curr = d._source.op_params;
-
-              curr.common = {
-                c1: util.str2Obj(curr.c1),
-                c2: util.str2Obj(curr.c2),
-                c3: util.str2Obj(curr.c3)
-              };
-              return curr;
-            })
+            list: jsondata.list
           }
         };
       } else {

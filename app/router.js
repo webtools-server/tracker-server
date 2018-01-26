@@ -35,6 +35,10 @@ module.exports = (app) => {
   app.put('/api/v1/project/:pid', 'apiV1.project.putOne');
   app.get('/api/v1/project/:pid?', 'apiV1.project.query');
 
+  // 字段
+  app.get('/api/v1/field', 'apiV1.field.getFields');
+  app.get('/api/v1/ceshi', 'apiV1.field.ceshi');
+
   // 告警规则
   app.post('/api/v1/alert_rule', 'apiV1.alertRule.createOne');
   app.delete('/api/v1/alert_rule/:id', 'apiV1.alertRule.deleteOne');

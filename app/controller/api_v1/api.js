@@ -192,21 +192,17 @@ module.exports = (app) => {
         offset: (page - 1) * PAGE_NUM
       };
 
-      const jsondata = yield ctx.service.tracker.query(sqlObj);
+      const jsondata = yield ctx.service.api.query(sqlObj);
 
       // 如果没有错误
       if (!jsondata.error) {
         ctx.body = {
           code: RET_CODE.OK,
           data: {
-            total: jsondata.hits.total,
+            total: jsondata.total,
             currPage: page,
             pageSize: PAGE_NUM,
-            list: jsondata.hits.hits.map((d) => {
-              const curr = d._source.op_params;
-              curr.common = ctx.service.api.parseCommonFields(curr);
-              return curr;
-            })
+            list: jsondata.list
           }
         };
       } else {

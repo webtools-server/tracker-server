@@ -90,17 +90,17 @@ module.exports = (app) => {
         offset: (page - 1) * PAGE_NUM
       };
 
-      const jsondata = yield ctx.service.tracker.query(sqlObj);
+      const jsondata = yield ctx.service.error.query(sqlObj);
 
       // 如果没有错误
       if (!jsondata.error) {
         ctx.body = {
           code: RET_CODE.OK,
           data: {
-            total: jsondata.hits.total,
+            total: jsondata.total,
             currPage: page,
             pageSize: PAGE_NUM,
-            list: jsondata.hits.hits.map(d => d._source.op_params)
+            list: jsondata.list
           }
         };
       } else {
