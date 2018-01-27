@@ -2,7 +2,7 @@
  * 运算
  */
 
-module.exports = {
+const actionObj = {
   lt: { // 小于
     name: '小于',
     value: '1'
@@ -35,4 +35,14 @@ module.exports = {
     name: '不包含',
     value: '8'
   }
+};
+
+const actionEnum = Object.keys(actionObj).reduce((em, action) => {
+  em[action] = actionObj[action].value;
+  return em;
+}, {});
+
+module.exports = {
+  actionObj,
+  actionEnum
 };

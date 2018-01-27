@@ -9,7 +9,7 @@ module.exports = (app) => {
   class FieldController extends app.Controller {
     getFields() {
       this.ctx.body = {
-        fields,
+        fields: fields.actionObj,
         actions
       };
     }
