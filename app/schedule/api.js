@@ -6,7 +6,7 @@ const { TRACKER_TYPE } = require('../common/enum');
 
 exports.schedule = {
   cron: '0 0 */6 * * *', // 6个小时执行一次
-  type: 'all',
+  type: 'worker',
   immediate: process.env.NODE_ENV === 'production' // production环境下应用启动的时候，立即执行
 };
 
