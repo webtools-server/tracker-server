@@ -23,5 +23,16 @@ module.exports = (appInfo) => {
     password: 'root1234',
   };
 
+  config.transporter = {
+    appName: 'tracker',
+    host: 'smtp.exmail.qq.com',
+    secure: true,
+    port: 465,
+    auth: {
+      user: 'h5tool@jyblife.com',
+      pass: 'H5tool123456'
+    }
+  };
+
   return config;
 };
