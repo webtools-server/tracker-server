@@ -3,19 +3,19 @@
     border
     :data="lists"
     style="width: 100%">
-    <el-table-column prop="type" :formatter="(row) => fieldRuleType[row.type]" label="规则类型" width="100">
+    <el-table-column prop="type" :formatter="(row) => ruleTypeLabel[row.type]" label="规则类型" width="100">
     </el-table-column>
     <el-table-column prop="title" label="规则名称" width="160">
     </el-table-column>
-    <el-table-column prop="field_name" :formatter="(row) => fieldFieldsName[row.field_name]" label="字段名称" width="130">
+    <el-table-column prop="field_name" :formatter="getFieldsName" label="字段名称" width="130">
     </el-table-column>
-    <el-table-column prop="field_action" :formatter="(row) => fieldFieldsAction[row.field_action]" label="字段运算" width="100">
+    <el-table-column prop="field_action" :formatter="(row) => ruleActionLabel[row.field_action]" label="字段运算" width="100">
     </el-table-column>
     <el-table-column prop="field_value" label="字段值" width="100">
     </el-table-column>
-    <el-table-column prop="stat_type" :formatter="(row) => fieldStatType[row.stat_type]" label="统计类型" width="100">
+    <el-table-column prop="stat_type" :formatter="(row) => statTypeLabel[row.stat_type]" label="统计类型" width="100">
     </el-table-column>
-    <el-table-column prop="stat_action" :formatter="(row) => fieldStatAction[row.stat_action]" label="统计运算" width="100">
+    <el-table-column prop="stat_action" :formatter="(row) => ruleActionLabel[row.stat_action]" label="统计运算" width="100">
     </el-table-column>
     <el-table-column prop="stat_value" label="统计值" width="100">
     </el-table-column>
@@ -28,13 +28,7 @@
   </el-table>
 </template>
 <script>
-import {
-  fieldRuleType,
-  fieldFieldsName,
-  fieldFieldsAction,
-  fieldStatType,
-  fieldStatAction
-} from './field';
+import * as util from '../../utils/util';
 
 // action: delete,edit
 export default {
@@ -42,18 +36,63 @@ export default {
     lists: {
       type: Array,
       default: []
+    },
+    fields: {
+      type: Object,
+      default: {}
     }
   },
   data() {
     return {
-      fieldRuleType,
-      fieldFieldsName,
-      fieldFieldsAction,
-      fieldStatType,
-      fieldStatAction
+      // value
+      originRuleType: {
+        error: {},
+        api: {},
+        perf: {}
+      },
+      // label
+      ruleTypeLabel: {},
+      fieldsNameLabel: {},
+      errorFieldsNameLabel: {},
+      apiFieldsNameLabel: {},
+      perfFieldsNameLabel: {},
+      ruleActionLabel: {},
+      statTypeLabel: {}
     };
   },
   methods: {
+    normalizeDataByFields(data) {
+      const fields = data || this.fields;
+      if (util.isEmptyObject(fields)) return;
+      // type
+      this.originRuleType = fields.type.ruleType;
+      // get label
+      this.ruleTypeLabel = this.getLabelByValue(this.originRuleType);
+      this.errorFieldsNameLabel = this.getLabelByValue(fields.field.error);
+      this.apiFieldsNameLabel = this.getLabelByValue(fields.field.api);
+      this.perfFieldsNameLabel = this.getLabelByValue(fields.field.perf);
+      this.ruleActionLabel = this.getLabelByValue(fields.action);
+      this.statTypeLabel = this.getLabelByValue(fields.type.statType);
+    },
+    getLabelByValue(fields) {
+      return Object.keys(fields).reduce((obj, field) => {
+        obj[fields[field].value] = fields[field].name;
+        return obj;
+      }, {});
+    },
+    getFieldsName(row) {
+      const typeStr = String(row.type);
+      switch (typeStr) {
+        case this.originRuleType.error.value:
+          return this.errorFieldsNameLabel[row.field_name];
+        case this.originRuleType.api.value:
+          return this.apiFieldsNameLabel[row.field_name];
+        case this.originRuleType.perf.value:
+          return this.perfFieldsNameLabel[row.field_name];
+        default:
+          return '';
+      }
+    },
     handleClickEdit(index, row) {
       this.$emit('edit', index, row);
     },
@@ -65,6 +104,11 @@ export default {
       }).then(() => {
         this.$emit('delete', index, row);
       }).catch(() => {});
+    }
+  },
+  watch: {
+    fields(val) {
+      this.normalizeDataByFields(val);
     }
   }
 }

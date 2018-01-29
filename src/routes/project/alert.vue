@@ -23,6 +23,7 @@
           <el-col :span="24">
             <alert-rule-list
               :lists="tableData"
+              :fields="fields"
               @edit="handleAlertRuleListEdit"
               @delete="handleAlertRuleListDelete"
             ></alert-rule-list>
@@ -61,6 +62,7 @@
       :visible="dialogRuleVisible"
       :isCreate="isCreate"
       :rule="ruleForm"
+      :fields="fields"
       :project="projectData"
       @close="dialogRuleVisible = false"
       @post="handleDialogPost"
@@ -81,6 +83,7 @@ export default {
   data() {
     return {
       dialogRuleVisible: false,
+      fields: {},
       projectData: {
         pid: '',
         title: ''
@@ -118,15 +121,22 @@ export default {
     if (pid) {
       Promise.all([
         api.queryProject(pid),
+        api.getFields(),
         api.queryAlertRuleByPid(pid),
         api.fetchUserList({ all: 666 })
       ]).then((res) => {
         const project = res[0];
-        const alertRule = res[1];
-        const userList = res[2];
+        const fields = res[1];
+        const alertRule = res[2];
+        const userList = res[3];
 
         if (project.code !== 0) {
           this.showErrorMsg(project.msg);
+          return;
+        }
+
+        if (fields.code !== 0) {
+          this.showErrorMsg(fields.msg);
           return;
         }
 
@@ -139,6 +149,8 @@ export default {
           this.showErrorMsg(userList.msg);
           return;
         }
+        // 字段数据
+        this.fields = fields.data;
         // 项目
         this.projectData.pid = project.data.pid;
         this.projectData.title = project.data.title;

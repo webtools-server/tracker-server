@@ -36,8 +36,7 @@ module.exports = (app) => {
   app.get('/api/v1/project/:pid?', 'apiV1.project.query');
 
   // 字段
-  app.get('/api/v1/field', 'apiV1.field.getFields');
-  app.get('/api/v1/ceshi', 'apiV1.field.ceshi');
+  app.get('/api/v1/field/:type?', 'apiV1.field.getFields');
 
   // 告警规则
   app.post('/api/v1/alert_rule', 'apiV1.alertRule.createOne');

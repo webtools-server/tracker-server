@@ -5,34 +5,52 @@
         <el-input v-model="ruleForm.title" auto-complete="off" placeholder="请输入规则名称"></el-input>
       </el-form-item>
       <el-form-item label="规则类型" prop="type">
-        <el-select v-model="ruleForm.type" clearable placeholder="请选择">
+        <el-select v-model="ruleForm.type" placeholder="请选择">
           <el-option v-for="item in ruleType" :key="item.value" :label="item.label" :value="item.value"></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="字段名称" prop="fieldName">
-        <el-select v-model="ruleForm.fieldName" clearable placeholder="请选择">
-          <el-option class="clearfix" v-for="item in fieldsName" :key="item.value" :label="item.label" :value="item.value">
+      <!-- 字段名称 start -->
+      <el-form-item v-if="ruleForm.type === originRuleType.error.value" label="字段名称" prop="fieldName">
+        <el-select v-model="ruleForm.fieldName" placeholder="请选择">
+          <el-option class="clearfix" v-for="item in errorFieldsName" :key="item.value" :label="item.label" :value="item.value">
             <span class="ui-fl-l">{{item.label}}</span>
             <span class="ui-fl-r field-value">{{item.value}}</span>
           </el-option>
         </el-select>
       </el-form-item>
+      <el-form-item v-if="ruleForm.type === originRuleType.api.value" label="字段名称" prop="fieldName">
+        <el-select v-model="ruleForm.fieldName" placeholder="请选择">
+          <el-option class="clearfix" v-for="item in apiFieldsName" :key="item.value" :label="item.label" :value="item.value">
+            <span class="ui-fl-l">{{item.label}}</span>
+            <span class="ui-fl-r field-value">{{item.value}}</span>
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item v-if="ruleForm.type === originRuleType.perf.value" label="字段名称" prop="fieldName">
+        <el-select v-model="ruleForm.fieldName" placeholder="请选择">
+          <el-option class="clearfix" v-for="item in perfFieldsName" :key="item.value" :label="item.label" :value="item.value">
+            <span class="ui-fl-l">{{item.label}}</span>
+            <span class="ui-fl-r field-value">{{item.value}}</span>
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <!-- 字段名称 end -->
       <el-form-item label="字段运算" prop="fieldAction">
-        <el-select v-model="ruleForm.fieldAction" clearable placeholder="请选择">
-          <el-option v-for="item in fieldsAction" :key="item.value" :label="item.label" :value="item.value"></el-option>
+        <el-select v-model="ruleForm.fieldAction" placeholder="请选择">
+          <el-option v-for="item in ruleAction" :key="item.value" :label="item.label" :value="item.value"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="字段值" prop="fieldValue">
         <el-input v-model="ruleForm.fieldValue" auto-complete="off" placeholder="请输入字段值"></el-input>
       </el-form-item>
       <el-form-item label="统计类型" prop="statType">
-        <el-select v-model="ruleForm.statType" clearable placeholder="请选择">
+        <el-select v-model="ruleForm.statType" placeholder="请选择">
           <el-option v-for="item in statType" :key="item.value" :label="item.label" :value="item.value"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="统计运算" prop="statAction">
-        <el-select v-model="ruleForm.statAction" clearable placeholder="请选择">
-          <el-option v-for="item in statAction" :key="item.value" :label="item.label" :value="item.value"></el-option>
+        <el-select v-model="ruleForm.statAction" placeholder="请选择">
+          <el-option v-for="item in ruleAction" :key="item.value" :label="item.label" :value="item.value"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="统计值" prop="statValue">
@@ -44,17 +62,17 @@
       <span class="rule-desc-content ui-fl-l">
         <span class="color-ff0000">{{project.pid}}</span>
         <span>的</span>
-        <span class="color-ff0000">{{fieldRuleType[ruleForm.type] || '{type}'}}</span>
+        <span class="color-ff0000">{{ruleTypeLabel[ruleForm.type] || '{type}'}}</span>
         <span>上报记录中</span>
         <span class="color-ff0000">
-          {{fieldFieldsName[ruleForm.fieldName] || '{fieldName}'}}
-          {{fieldFieldsAction[ruleForm.fieldAction] || '{fieldAction}'}}
+          {{fieldsNameLabel[ruleForm.fieldName] || '{fieldName}'}}
+          {{ruleActionLabel[ruleForm.fieldAction] || '{fieldAction}'}}
           {{ruleForm.fieldValue || '{fieldValue}'}}
         </span>
         <span>的</span>
         <span class="color-ff0000">
-          {{fieldStatType[ruleForm.statType] || '{statType}'}}
-          {{fieldStatAction[ruleForm.statAction] || '{statAction}'}}
+          {{statTypeLabel[ruleForm.statType] || '{statType}'}}
+          {{ruleActionLabel[ruleForm.statAction] || '{statAction}'}}
           {{ruleForm.statValue || '{statValue}'}}
         </span>
       </span>
@@ -67,18 +85,8 @@
 </template>
 
 <script>
-import {
-  RULE_TYPE,
-  FIELDS_NAME,
-  FIELDS_ACTION,
-  STAT_TYPE,
-  STAT_ACTION,
-  fieldRuleType,
-  fieldFieldsName,
-  fieldFieldsAction,
-  fieldStatType,
-  fieldStatAction
-} from './field';
+import * as api from '../../api/index';
+import * as util from '../../utils/util';
 
 // emit: close, post
 // props: visible, rule
@@ -100,20 +108,34 @@ export default {
     project: {
       type: Object,
       default: {}
+    },
+    fields: {
+      type: Object,
+      default: {}
     }
   },
   data () {
     return {
-      ruleType: RULE_TYPE,
-      fieldsName: FIELDS_NAME,
-      fieldsAction: FIELDS_ACTION,
-      statType: STAT_TYPE,
-      statAction: STAT_ACTION,
-      fieldRuleType,
-      fieldFieldsName,
-      fieldFieldsAction,
-      fieldStatType,
-      fieldStatAction,
+      // value
+      originRuleType: {
+        error: {},
+        api: {},
+        perf: {}
+      },
+      ruleType: [],
+      errorFieldsName: [],
+      apiFieldsName: [],
+      perfFieldsName: [],
+      ruleAction: [],
+      statType: [],
+      // label
+      ruleTypeLabel: {},
+      fieldsNameLabel: {},
+      errorFieldsNameLabel: {},
+      apiFieldsNameLabel: {},
+      perfFieldsNameLabel: {},
+      ruleActionLabel: {},
+      statTypeLabel: {},
       ruleForm: {
         type: '',
         title: '',
@@ -153,9 +175,42 @@ export default {
     }
   },
   created() {
+    this.normalizeDataByFields();
     Object.assign(this.ruleForm, this.rule);
   },
   methods: {
+    normalizeDataByFields(data) {
+      const fields = data || this.fields;
+      if (util.isEmptyObject(fields)) return;
+      // type
+      this.originRuleType = fields.type.ruleType;
+      this.ruleType = this.normalizeData(this.originRuleType);
+      // field
+      this.errorFieldsName = this.normalizeData(fields.field.error);
+      this.apiFieldsName = this.normalizeData(fields.field.api);
+      this.perfFieldsName = this.normalizeData(fields.field.perf);
+      // action
+      this.ruleAction = this.normalizeData(fields.action);
+      // statType
+      this.statType = this.normalizeData(fields.type.statType);
+
+      // get label
+      this.ruleTypeLabel = util.getLabelByValue(this.ruleType);
+      this.errorFieldsNameLabel = util.getLabelByValue(this.errorFieldsName);
+      this.apiFieldsNameLabel = util.getLabelByValue(this.apiFieldsName);
+      this.perfFieldsNameLabel = util.getLabelByValue(this.perfFieldsName);
+      this.ruleActionLabel = util.getLabelByValue(this.ruleAction);
+      this.statTypeLabel = util.getLabelByValue(this.statType);
+    },
+    normalizeData(originData) {
+      return Object.keys(originData).map((d) => {
+        const currentValue = originData[d];
+        return {
+          label: currentValue.name,
+          value: currentValue.value
+        };
+      });
+    },
     handleSubmit () {
       this.$refs.ruleForm.validate(valid => {
         if (!valid) return false;
@@ -173,8 +228,30 @@ export default {
     }
   },
   watch: {
+    fields(val) {
+      this.normalizeDataByFields(val);
+    },
     rule(val) {
       Object.assign(this.ruleForm, val);
+    },
+    'ruleForm.type'(val, oldVal) {
+      if (oldVal) {
+        this.ruleForm.fieldName = '';
+      }
+      switch (val) {
+        case this.originRuleType.error.value:
+          this.fieldsNameLabel = this.errorFieldsNameLabel;
+          break;
+        case this.originRuleType.api.value:
+          this.fieldsNameLabel = this.apiFieldsNameLabel;
+          break;
+        case this.originRuleType.perf.value:
+          this.fieldsNameLabel = this.perfFieldsNameLabel;
+          break;
+        default:
+          this.fieldsNameLabel = {};
+          break;
+      }
     }
   }
 }

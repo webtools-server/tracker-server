@@ -237,3 +237,10 @@ export function queryAlertRuleByPid(id) {
 export function deleteAlertRule(id) {
   return axiosInstance.delete(`/alert_rule/${id}`);
 }
+
+/**
+ * 获取字段
+ */
+export function getFields() {
+  return axiosInstance.get('/field');
+}

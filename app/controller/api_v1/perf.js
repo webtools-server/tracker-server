@@ -51,7 +51,7 @@ module.exports = (app) => {
         offset: (page - 1) * PAGE_NUM
       };
 
-      const jsondata = yield ctx.service.tracker.query(sqlObj);
+      const jsondata = yield ctx.service.perf.query(sqlObj);
 
       // 如果没有错误
       if (!jsondata.error) {
