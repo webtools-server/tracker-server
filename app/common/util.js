@@ -126,6 +126,19 @@ function findIndexFromObjArray(arr, key) {
   return -1;
 }
 
+/**
+ * 转换字段对象格式
+ * @param {Object} fields
+ * @return {Object}
+ */
+function normailizeFieldObject(fields) {
+  return Object.keys(fields).reduce((obj, field) => {
+    const curr = fields[field];
+    obj[curr.value] = curr.name;
+    return obj;
+  }, {});
+}
+
 module.exports = {
   isObject,
   isBoolean,
@@ -135,5 +148,6 @@ module.exports = {
   str2Obj,
   parseJson,
   getUrlPath,
-  findIndexFromObjArray
+  findIndexFromObjArray,
+  normailizeFieldObject
 };

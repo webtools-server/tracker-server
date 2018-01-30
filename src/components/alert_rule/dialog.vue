@@ -5,9 +5,16 @@
         <el-input v-model="ruleForm.title" auto-complete="off" placeholder="请输入规则名称"></el-input>
       </el-form-item>
       <el-form-item label="规则类型" prop="type">
-        <el-select v-model="ruleForm.type" placeholder="请选择">
-          <el-option v-for="item in ruleType" :key="item.value" :label="item.label" :value="item.value"></el-option>
-        </el-select>
+        <el-row>
+          <el-col :span="18">
+            <el-select v-model="ruleForm.type" placeholder="请选择">
+              <el-option v-for="item in ruleType" :key="item.value" :label="item.label" :value="item.value"></el-option>
+            </el-select>
+          </el-col>
+          <el-col :span="4" :offset="1">
+            <el-button @click="showField">字段</el-button>
+          </el-col>
+        </el-row>
       </el-form-item>
       <!-- 字段名称 start -->
       <el-form-item v-if="ruleForm.type === originRuleType.error.value" label="字段名称" prop="fieldName">
@@ -79,7 +86,7 @@
     </div>
     <div slot="footer" class="dialog-footer">
       <el-button @click="handleClickCancel">取 消</el-button>
-      <el-button type="primary" @click="handleSubmit">确 定</el-button>
+      <el-button type="primary" @click="handleSubmit">保 存</el-button>
     </div>
   </el-dialog>
 </template>
@@ -87,6 +94,7 @@
 <script>
 import * as api from '../../api/index';
 import * as util from '../../utils/util';
+import syntaxHighlight from '../../utils/highlight';
 
 // emit: close, post
 // props: visible, rule
@@ -128,6 +136,8 @@ export default {
       perfFieldsName: [],
       ruleAction: [],
       statType: [],
+      currentFieldData: {}, // 当前类型的字段数据
+      fieldsAllData: {}, // 字段数据
       // label
       ruleTypeLabel: {},
       fieldsNameLabel: {},
@@ -176,9 +186,31 @@ export default {
   },
   created() {
     this.normalizeDataByFields();
+    api.getFieldsData().then((res) => {
+      if (res.code === 0) {
+        this.fieldsAllData = res.data;
+      }
+    });
     Object.assign(this.ruleForm, this.rule);
   },
   methods: {
+    showField() {
+      const h = this.$createElement;
+      this.$msgbox({
+        title: '字段详情',
+        lockScroll: false,
+        customClass: 'field-detail-message-box',
+        message: h('pre', {
+          staticClass: 'hl-pre',
+          domProps: {
+            innerHTML: this._s(this.highlight(this.currentFieldData))
+          }
+        })
+      });
+    },
+    highlight(json) {
+      return syntaxHighlight(json);
+    },
     normalizeDataByFields(data) {
       const fields = data || this.fields;
       if (util.isEmptyObject(fields)) return;
@@ -240,15 +272,19 @@ export default {
       }
       switch (val) {
         case this.originRuleType.error.value:
+          this.currentFieldData = this.fieldsAllData.error;
           this.fieldsNameLabel = this.errorFieldsNameLabel;
           break;
         case this.originRuleType.api.value:
+          this.currentFieldData = this.fieldsAllData.api;
           this.fieldsNameLabel = this.apiFieldsNameLabel;
           break;
         case this.originRuleType.perf.value:
+          this.currentFieldData = this.fieldsAllData.perf;
           this.fieldsNameLabel = this.perfFieldsNameLabel;
           break;
         default:
+          this.currentFieldData = {};
           this.fieldsNameLabel = {};
           break;
       }
@@ -256,7 +292,19 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
+.field-detail-message-box {
+  width: 80%;
+
+  .el-message-box__content {
+    padding: 10px 20px;
+  }
+
+  .hl-pre {
+    max-height: 400px;
+  }
+}
+
 .dialog-alert-rule {
   .el-form {
     width: 400px;

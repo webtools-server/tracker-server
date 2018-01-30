@@ -22,6 +22,10 @@ module.exports = (app) => {
       return yield this.ctx.model.User.findOne({ where: { id } });
     }
 
+    * findAllByIds(ids) {
+      return yield this.ctx.model.User.findAllByIds(ids);
+    }
+
     * findAndCountAll(where, offset, limit, order) {
       const defaultOrder = [['id', 'DESC']];
 

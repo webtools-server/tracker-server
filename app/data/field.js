@@ -2,7 +2,9 @@
  * 字段
  */
 
-module.exports = {
+const util = require('../common/util');
+
+const fieldObj = {
   error: {
     platform: {
       name: '平台',
@@ -305,5 +307,16 @@ module.exports = {
       type: 'String'
     }
   }
+};
+
+const errorFieldName = util.normailizeFieldObject(fieldObj.error);
+const apiFieldName = util.normailizeFieldObject(fieldObj.api);
+const perfFieldName = util.normailizeFieldObject(fieldObj.perf);
+
+module.exports = {
+  fieldObj,
+  errorFieldName,
+  apiFieldName,
+  perfFieldName
 };
 

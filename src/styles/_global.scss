@@ -42,3 +42,30 @@ a {
 .el-loading-mask {
   z-index: 1000;
 }
+
+/* highlight */
+.hl-pre {
+	outline: 1px solid #dfe6ec;
+  padding: 5px;
+  overflow: auto;
+}
+
+.hl-string {
+	color: green;
+}
+
+.hl-number {
+	color: darkorange;
+}
+
+.hl-boolean {
+	color: blue;
+}
+
+.hl-null {
+	color: magenta;
+}
+
+.hl-key {
+	color: red;
+}

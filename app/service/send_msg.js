@@ -23,9 +23,6 @@ module.exports = (app) => {
         return error;
       });
     }
-    * send(to, subject, html) {
-      return yield [this.sendEmail(to, subject, html)];
-    }
   }
   return SendMsgService;
 };

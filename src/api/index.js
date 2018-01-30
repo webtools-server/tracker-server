@@ -244,3 +244,10 @@ export function deleteAlertRule(id) {
 export function getFields() {
   return axiosInstance.get('/field');
 }
+
+/**
+ * 获取字段数据
+ */
+export function getFieldsData() {
+  return axiosInstance.get('/field/data');
+}

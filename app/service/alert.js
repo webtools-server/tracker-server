@@ -3,10 +3,11 @@
  */
 
 const { TRACKER_TYPE } = require('../common/enum');
-const comAction = require('../data/action');
+const dataField = require('../data/field');
+const dataAction = require('../data/action');
 const dataType = require('../data/type');
 
-const MAX_LIMIT = 100;
+const MAX_LIMIT = 500;
 
 module.exports = (app) => {
   class AlertService extends app.Service {
@@ -71,7 +72,7 @@ module.exports = (app) => {
      * @param {String|Number} ruleFieldValue 规则字段值
      */
     useAction(ruleAction, fieldValue, ruleFieldValue) {
-      const actionEnum = comAction.actionEnum;
+      const actionEnum = dataAction.actionEnum;
       // to string
       const fieldValueStr = String(fieldValue);
       const ruleFieldValueStr = String(ruleFieldValue);
@@ -104,7 +105,7 @@ module.exports = (app) => {
      */
     getHitRule(rules, result) {
       const hitRule = {};
-      const ruleType = dataType.ruleType;
+      const statType = dataType.statType;
 
       for (const k in rules) {
         const currRule = result[k];
@@ -120,10 +121,10 @@ module.exports = (app) => {
             let num = 0;
             // 统计类型
             switch (statTypeStr) {
-              case ruleType.total.value: // 总数
+              case statType.total.value: // 总数
                 num = ruleCalcValue;
                 break;
-              case ruleType.ratio.value: // 比例
+              case statType.ratio.value: // 比例
                 num = Math.round((ruleCalcValue / MAX_LIMIT) * 100);
                 break;
               default:
@@ -150,7 +151,7 @@ module.exports = (app) => {
         for (const k in alertRule) {
           const currProj = alertRule[k];
 
-          currProj.filter(r => r.type == trackerType).forEach((rule) => {
+          currProj.filter(r => String(r.type) === String(trackerType)).forEach((rule) => {
             const res = this.runRule(ed, rule);
             if (res) {
               if (ruleResult[k][rule.id] === undefined) {
@@ -176,13 +177,16 @@ module.exports = (app) => {
         });
         if (Array.isArray(projects)) {
           const ruleResult = {};
+          const projectObj = {};
 
           // 过滤没有设置告警联系人的记录
           const alertProject = projects.filter(project => project.alert_user);
           // 获取规则对象
           const alertRule = yield alertProject.reduce((obj, project) => {
-            obj[project.pid] = this.ctx.model.AlertRule.findAll({ where: { pid: project.pid } });
-            ruleResult[project.pid] = {};
+            const pid = project.pid;
+            obj[pid] = this.ctx.model.AlertRule.findAll({ where: { pid } });
+            ruleResult[pid] = {};
+            projectObj[pid] = project;
             return obj;
           }, {});
           // 执行错误类型规则
@@ -194,7 +198,7 @@ module.exports = (app) => {
           // 获取命中规则
           const hitRule = this.getHitRule(alertRule, ruleResult);
           // 发送告警
-          yield this.sendAlertMsg(hitRule);
+          yield this.sendAlertMsg(hitRule, projectObj);
           return { hitRule };
         }
         return {};
@@ -207,17 +211,71 @@ module.exports = (app) => {
      * 发送告警信息
      * @param {Object} hitRule 命中的规则
      */
-    * sendAlertMsg(hitRule) {
+    * sendAlertMsg(hitRule, projects) {
       for (const k in hitRule) {
         const currRule = hitRule[k];
         if (Array.isArray(currRule) && currRule.length > 0) {
-          yield this.ctx.service.sendMsg.send(
-            'canye.wu@jyblife.com',
-            `项目${k}命中${currRule.length}条告警规则`,
-            JSON.stringify(currRule)
-          );
+          // 获取项目联系人
+          const user = projects[k].alert_user;
+          // 用户信息
+          const userInfo = yield this.ctx.service.user.findAllByIds(user ? user.split(',') : []);
+          // 用户邮箱
+          const userEmail = userInfo.map(u => u.email);
+
+          if (userEmail.length) {
+            yield this.ctx.service.sendMsg.sendEmail(
+              userEmail.join(','),
+              `项目${k}命中${currRule.length}条告警规则`,
+              currRule.map(rule => this.normalizeAlertInfo(rule)).join('<br>')
+            );
+          }
         }
       }
+    }
+
+    /**
+     * 优化告警信息
+     */
+    normalizeAlertInfo(record) {
+      const pid = record.pid;
+      const typeStr = String(record.type);
+      const fieldNameStr = String(record.field_name);
+      const fieldActionStr = String(record.field_action);
+      const statTypeStr = String(record.stat_type);
+      const statActionStr = String(record.stat_action);
+
+      const type = dataType.ruleTypeName[typeStr];
+      const fieldAction = dataAction.actionName[fieldActionStr];
+      const statType = dataType.statTypeName[statTypeStr];
+      const statAction = dataAction.actionName[statActionStr];
+      let fieldName = '';
+
+      // 字段名
+      switch (typeStr) {
+        case dataType.ruleType.error.value:
+          fieldName = dataField.errorFieldName[fieldNameStr];
+          break;
+        case dataType.ruleType.api.value:
+          fieldName = dataField.apiFieldName[fieldNameStr];
+          break;
+        case dataType.ruleType.perf.value:
+          fieldName = dataField.perfFieldName[fieldNameStr];
+          break;
+        default:
+          fieldName = '';
+          break;
+      }
+
+      return `
+        <span style="color: red;">${record.title}</span>：
+        <span style="color: red;">${pid}</span>
+        的
+        <span style="color: red;">${type}</span>
+        上报记录中
+        <span style="color: red;">${fieldName}${fieldAction}${record.field_value}</span>
+        的
+        <span style="color: red;">${statType}${statAction}${record.stat_value}</span>
+      `;
     }
   }
   return AlertService;

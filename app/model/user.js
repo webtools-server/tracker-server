@@ -3,7 +3,7 @@
  */
 
 module.exports = (app) => {
-  const { STRING, INTEGER } = app.Sequelize;
+  const { STRING, INTEGER, Op } = app.Sequelize;
 
   const User = app.model.define('User', {
     id: {
@@ -36,6 +36,16 @@ module.exports = (app) => {
     tableName: 'user',
     comment: '用户表'
   });
+
+  User.findAllByIds = function* (ids = []) {
+    return yield this.findAll({
+      where: {
+        id: {
+          [Op.in]: ids
+        }
+      }
+    });
+  };
 
   return User;
 };

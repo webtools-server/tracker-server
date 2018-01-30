@@ -37,12 +37,17 @@ const actionObj = {
   }
 };
 
-const actionEnum = Object.keys(actionObj).reduce((em, action) => {
-  em[action] = actionObj[action].value;
-  return em;
-}, {});
+const actionEnum = {};
+const actionName = {};
+
+for (const k in actionObj) {
+  const curr = actionObj[k];
+  actionEnum[k] = curr.value;
+  actionName[curr.value] = curr.name;
+}
 
 module.exports = {
   actionObj,
-  actionEnum
+  actionEnum,
+  actionName
 };

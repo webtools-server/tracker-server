@@ -4,6 +4,7 @@
 
 module.exports = (app) => {
   app.get('/', 'home.index');
+  app.get('/api/v1/calc_alert_rule', 'apiV1.field.calcAlertRule');
 
   // 验证
   app.get('/auth/login', 'auth.login');
@@ -36,6 +37,7 @@ module.exports = (app) => {
   app.get('/api/v1/project/:pid?', 'apiV1.project.query');
 
   // 字段
+  app.get('/api/v1/field/data', 'apiV1.field.getFieldsData');
   app.get('/api/v1/field/:type?', 'apiV1.field.getFields');
 
   // 告警规则

@@ -4,7 +4,7 @@
 
 
 exports.schedule = {
-  interval: '1h', // 间隔1个小时执行一次
+  interval: '30m', // 间隔30分钟执行一次
   type: 'worker',
   disable: process.env.NODE_ENV !== 'production' // production环境下才执行
 };

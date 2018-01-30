@@ -2,6 +2,7 @@
  * 类型
  */
 
+const util = require('../common/util');
 const { TRACKER_TYPE } = require('../common/enum');
 
 // 规则类型
@@ -32,7 +33,12 @@ const statType = {
   }
 };
 
+const ruleTypeName = util.normailizeFieldObject(ruleType);
+const statTypeName = util.normailizeFieldObject(statType);
+
 module.exports = {
   ruleType,
-  statType
+  statType,
+  ruleTypeName,
+  statTypeName
 };
