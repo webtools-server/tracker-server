@@ -1,6 +1,6 @@
 {
   "name": "tracker-server",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "前端数据服务",
   "private": true,
   "dependencies": {
