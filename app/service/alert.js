@@ -62,7 +62,7 @@ module.exports = (app) => {
       if (fieldValue === undefined) {
         return false;
       }
-      return this.useAction(rule.field_action, fieldValue, rule.field_value);
+      return this.useFieldAction(rule.field_action, fieldValue, rule.field_value);
     }
 
     /**
@@ -71,7 +71,7 @@ module.exports = (app) => {
      * @param {String|Number} fieldValue 字段值
      * @param {String|Number} ruleFieldValue 规则字段值
      */
-    useAction(ruleAction, fieldValue, ruleFieldValue) {
+    useFieldAction(ruleAction, fieldValue, ruleFieldValue) {
       const actionEnum = dataAction.actionEnum;
       // to string
       const fieldValueStr = String(fieldValue);
@@ -90,6 +90,42 @@ module.exports = (app) => {
           return fieldValueStr === ruleFieldValueStr;
         case actionEnum.neq: // 不等于
           return fieldValueStr !== ruleFieldValueStr;
+        case actionEnum.ct: // 包含
+          return fieldValueStr.indexOf(ruleFieldValueStr) > -1;
+        case actionEnum.nct: // 不包含
+          return fieldValueStr.indexOf(ruleFieldValueStr) === -1;
+        default: return false;
+      }
+    }
+
+    /**
+     * 执行运算
+     * @param {String|Number} ruleAction 规则运算
+     * @param {String|Number} fieldValue 字段值
+     * @param {String|Number} ruleFieldValue 规则字段值
+     */
+    useStatAction(ruleAction, fieldValue, ruleFieldValue) {
+      const actionEnum = dataAction.actionEnum;
+      // to number
+      const fieldValueNum = Number(fieldValue);
+      const ruleFieldValueNum = Number(ruleFieldValue);
+      // to string
+      const fieldValueStr = String(fieldValue);
+      const ruleFieldValueStr = String(ruleFieldValue);
+
+      switch (String(ruleAction)) {
+        case actionEnum.lt: // 小于
+          return fieldValueNum < ruleFieldValueNum;
+        case actionEnum.lte: // 小于等于
+          return fieldValueNum <= ruleFieldValueNum;
+        case actionEnum.gt: // 大于
+          return fieldValueNum > ruleFieldValueNum;
+        case actionEnum.gte: // 大于等于
+          return fieldValueNum >= ruleFieldValueNum;
+        case actionEnum.eq: // 等于
+          return fieldValueNum === ruleFieldValueNum;
+        case actionEnum.neq: // 不等于
+          return fieldValueNum !== ruleFieldValueNum;
         case actionEnum.ct: // 包含
           return fieldValueStr.indexOf(ruleFieldValueStr) > -1;
         case actionEnum.nct: // 不包含
@@ -130,7 +166,7 @@ module.exports = (app) => {
               default:
                 return false;
             }
-            return this.useAction(rule.stat_action, num, rule.stat_value);
+            return this.useStatAction(rule.stat_action, num, rule.stat_value);
           });
         }
       }
@@ -149,6 +185,7 @@ module.exports = (app) => {
       // 执行类型规则
       dataCollection.list.forEach((ed) => {
         for (const k in alertRule) {
+          if (ed.pid !== k) return;
           const currProj = alertRule[k];
 
           currProj.filter(r => String(r.type) === String(trackerType)).forEach((rule) => {
