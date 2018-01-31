@@ -37,11 +37,11 @@ module.exports = (app) => {
         method: c1[1],
         url: c1[2],
         body: c1[3],
-        time: parseInt(c2[1] || '', 10),
-        statusCode: parseInt(c2[2] || '', 10),
+        time: parseInt(c2[1], 10) || 0,
+        statusCode: parseInt(c2[2], 10) || 0,
         statusText: c2[3],
         result: obj.c3,
-        resultCode: parseInt(c3[1] || '', 10),
+        resultCode: parseInt(c3[1], 10) || 0,
         resultMsg: c3[3]
       };
     }
