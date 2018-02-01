@@ -62,7 +62,7 @@ module.exports = (app) => {
       if (fieldValue === undefined) {
         return false;
       }
-      return this.useFieldAction(rule.field_action, fieldValue, rule.field_value);
+      return this.useAction(rule.field_action, fieldValue, rule.field_value);
     }
 
     /**
@@ -71,65 +71,37 @@ module.exports = (app) => {
      * @param {String|Number} fieldValue 字段值
      * @param {String|Number} ruleFieldValue 规则字段值
      */
-    useFieldAction(ruleAction, fieldValue, ruleFieldValue) {
+    useAction(ruleAction, fieldValue, ruleFieldValue) {
       const actionEnum = dataAction.actionEnum;
       // to string
-      const fieldValueStr = String(fieldValue);
-      const ruleFieldValueStr = String(ruleFieldValue);
-
-      switch (String(ruleAction)) {
-        case actionEnum.lt: // 小于
-          return fieldValueStr < ruleFieldValueStr;
-        case actionEnum.lte: // 小于等于
-          return fieldValueStr <= ruleFieldValueStr;
-        case actionEnum.gt: // 大于
-          return fieldValueStr > ruleFieldValueStr;
-        case actionEnum.gte: // 大于等于
-          return fieldValueStr >= ruleFieldValueStr;
-        case actionEnum.eq: // 等于
-          return fieldValueStr === ruleFieldValueStr;
-        case actionEnum.neq: // 不等于
-          return fieldValueStr !== ruleFieldValueStr;
-        case actionEnum.ct: // 包含
-          return fieldValueStr.indexOf(ruleFieldValueStr) > -1;
-        case actionEnum.nct: // 不包含
-          return fieldValueStr.indexOf(ruleFieldValueStr) === -1;
-        default: return false;
-      }
-    }
-
-    /**
-     * 执行运算
-     * @param {String|Number} ruleAction 规则运算
-     * @param {String|Number} fieldValue 字段值
-     * @param {String|Number} ruleFieldValue 规则字段值
-     */
-    useStatAction(ruleAction, fieldValue, ruleFieldValue) {
-      const actionEnum = dataAction.actionEnum;
+      let compareFieldValue = String(fieldValue);
+      let compareRuleFieldValue = String(ruleFieldValue);
       // to number
       const fieldValueNum = Number(fieldValue);
       const ruleFieldValueNum = Number(ruleFieldValue);
-      // to string
-      const fieldValueStr = String(fieldValue);
-      const ruleFieldValueStr = String(ruleFieldValue);
+
+      if (!isNaN(fieldValueNum) && !isNaN(ruleFieldValueNum)) {
+        compareFieldValue = fieldValueNum;
+        compareRuleFieldValue = ruleFieldValueNum;
+      }
 
       switch (String(ruleAction)) {
         case actionEnum.lt: // 小于
-          return fieldValueNum < ruleFieldValueNum;
+          return compareFieldValue < compareRuleFieldValue;
         case actionEnum.lte: // 小于等于
-          return fieldValueNum <= ruleFieldValueNum;
+          return compareFieldValue <= compareRuleFieldValue;
         case actionEnum.gt: // 大于
-          return fieldValueNum > ruleFieldValueNum;
+          return compareFieldValue > compareRuleFieldValue;
         case actionEnum.gte: // 大于等于
-          return fieldValueNum >= ruleFieldValueNum;
+          return compareFieldValue >= compareRuleFieldValue;
         case actionEnum.eq: // 等于
-          return fieldValueNum === ruleFieldValueNum;
+          return compareFieldValue === compareRuleFieldValue;
         case actionEnum.neq: // 不等于
-          return fieldValueNum !== ruleFieldValueNum;
+          return compareFieldValue !== compareRuleFieldValue;
         case actionEnum.ct: // 包含
-          return fieldValueStr.indexOf(ruleFieldValueStr) > -1;
+          return String(compareFieldValue).indexOf(String(compareRuleFieldValue)) > -1;
         case actionEnum.nct: // 不包含
-          return fieldValueStr.indexOf(ruleFieldValueStr) === -1;
+          return String(compareFieldValue).indexOf(String(compareRuleFieldValue)) === -1;
         default: return false;
       }
     }
@@ -166,7 +138,7 @@ module.exports = (app) => {
               default:
                 return false;
             }
-            return this.useStatAction(rule.stat_action, num, rule.stat_value);
+            return this.useAction(rule.stat_action, num, rule.stat_value);
           });
         }
       }
@@ -185,19 +157,20 @@ module.exports = (app) => {
       // 执行类型规则
       dataCollection.list.forEach((ed) => {
         for (const k in alertRule) {
-          if (ed.pid !== k) return;
-          const currProj = alertRule[k];
+          if (ed.pid === k) {
+            const currProj = alertRule[k];
 
-          currProj.filter(r => String(r.type) === String(trackerType)).forEach((rule) => {
-            const res = this.runRule(ed, rule);
-            if (res) {
-              if (ruleResult[k][rule.id] === undefined) {
-                ruleResult[k][rule.id] = 1;
-              } else {
-                ruleResult[k][rule.id]++;
+            currProj.filter(r => String(r.type) === String(trackerType)).forEach((rule) => {
+              const res = this.runRule(ed, rule);
+              if (res) {
+                if (ruleResult[k][rule.id] === undefined) {
+                  ruleResult[k][rule.id] = 1;
+                } else {
+                  ruleResult[k][rule.id]++;
+                }
               }
-            }
-          });
+            });
+          }
         }
       });
     }
@@ -236,7 +209,7 @@ module.exports = (app) => {
           const hitRule = this.getHitRule(alertRule, ruleResult);
           // 发送告警
           yield this.sendAlertMsg(hitRule, projectObj);
-          return { hitRule };
+          return { hitRule, ruleResult, alertRule };
         }
         return {};
       } catch (e) {

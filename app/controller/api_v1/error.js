@@ -78,12 +78,7 @@ module.exports = (app) => {
       const sqlObj = {
         where: [
           ['op_type', 'error'],
-          ['op_params.t_type', TRACKER_TYPE.ERROR],
-          ['op_params.c1', { $notLike: '%WeixinJSBridge%' }], // 过滤WeixinJSBridge
-          ['op_params.c1', { $notLike: '%mmTrixJsClass%' }], // 过滤mmTrixJsClass
-          ['op_params.c1', { $notLike: '%91,37%' }], // 过滤91,37
-          ['op_params.c1', { $notLike: '%93,37%' }], // 过滤93,37
-          ['op_params.c1', { $notLike: '%93,38%' }] // 过滤93,38
+          ['op_params.t_type', TRACKER_TYPE.ERROR]
         ].concat(whereArr),
         order: [['@timestamp', 'desc']],
         limit: PAGE_NUM,
