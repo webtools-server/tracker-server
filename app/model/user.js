@@ -1,5 +1,5 @@
 /**
- * user model
+ * 用户model
  */
 
 module.exports = (app) => {

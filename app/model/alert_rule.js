@@ -1,5 +1,5 @@
 /**
- * alert_rule model
+ * 告警规则model
  */
 
 module.exports = (app) => {

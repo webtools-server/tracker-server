@@ -74,26 +74,34 @@ module.exports = (app) => {
     useAction(ruleAction, fieldValue, ruleFieldValue) {
       const actionEnum = dataAction.actionEnum;
       // to string
-      const fieldValueStr = String(fieldValue);
-      const ruleFieldValueStr = String(ruleFieldValue);
+      let compareFieldValue = String(fieldValue);
+      let compareRuleFieldValue = String(ruleFieldValue);
+      // to number
+      const fieldValueNum = Number(fieldValue);
+      const ruleFieldValueNum = Number(ruleFieldValue);
+
+      if (!isNaN(fieldValueNum) && !isNaN(ruleFieldValueNum)) {
+        compareFieldValue = fieldValueNum;
+        compareRuleFieldValue = ruleFieldValueNum;
+      }
 
       switch (String(ruleAction)) {
         case actionEnum.lt: // 小于
-          return fieldValueStr < ruleFieldValueStr;
+          return compareFieldValue < compareRuleFieldValue;
         case actionEnum.lte: // 小于等于
-          return fieldValueStr <= ruleFieldValueStr;
+          return compareFieldValue <= compareRuleFieldValue;
         case actionEnum.gt: // 大于
-          return fieldValueStr > ruleFieldValueStr;
+          return compareFieldValue > compareRuleFieldValue;
         case actionEnum.gte: // 大于等于
-          return fieldValueStr >= ruleFieldValueStr;
+          return compareFieldValue >= compareRuleFieldValue;
         case actionEnum.eq: // 等于
-          return fieldValueStr === ruleFieldValueStr;
+          return compareFieldValue === compareRuleFieldValue;
         case actionEnum.neq: // 不等于
-          return fieldValueStr !== ruleFieldValueStr;
+          return compareFieldValue !== compareRuleFieldValue;
         case actionEnum.ct: // 包含
-          return fieldValueStr.indexOf(ruleFieldValueStr) > -1;
+          return String(compareFieldValue).indexOf(String(compareRuleFieldValue)) > -1;
         case actionEnum.nct: // 不包含
-          return fieldValueStr.indexOf(ruleFieldValueStr) === -1;
+          return String(compareFieldValue).indexOf(String(compareRuleFieldValue)) === -1;
         default: return false;
       }
     }
@@ -149,18 +157,20 @@ module.exports = (app) => {
       // 执行类型规则
       dataCollection.list.forEach((ed) => {
         for (const k in alertRule) {
-          const currProj = alertRule[k];
+          if (ed.pid === k) {
+            const currProj = alertRule[k];
 
-          currProj.filter(r => String(r.type) === String(trackerType)).forEach((rule) => {
-            const res = this.runRule(ed, rule);
-            if (res) {
-              if (ruleResult[k][rule.id] === undefined) {
-                ruleResult[k][rule.id] = 1;
-              } else {
-                ruleResult[k][rule.id]++;
+            currProj.filter(r => String(r.type) === String(trackerType)).forEach((rule) => {
+              const res = this.runRule(ed, rule);
+              if (res) {
+                if (ruleResult[k][rule.id] === undefined) {
+                  ruleResult[k][rule.id] = 1;
+                } else {
+                  ruleResult[k][rule.id]++;
+                }
               }
-            }
-          });
+            });
+          }
         }
       });
     }
@@ -199,7 +209,7 @@ module.exports = (app) => {
           const hitRule = this.getHitRule(alertRule, ruleResult);
           // 发送告警
           yield this.sendAlertMsg(hitRule, projectObj);
-          return { hitRule };
+          return { hitRule, ruleResult, alertRule };
         }
         return {};
       } catch (e) {
@@ -223,11 +233,17 @@ module.exports = (app) => {
           const userEmail = userInfo.map(u => u.email);
 
           if (userEmail.length) {
-            yield this.ctx.service.sendMsg.sendEmail(
-              userEmail.join(','),
-              `项目${k}命中${currRule.length}条告警规则`,
-              currRule.map(rule => this.normalizeAlertInfo(rule)).join('<br>')
-            );
+            const alertTitle = `项目${k}命中${currRule.length}条告警规则`;
+            const alertDesc = currRule.map(rule => this.normalizeAlertInfo(rule)).join('<br>');
+
+            // 发送告警邮件
+            yield this.ctx.service.sendMsg.sendEmail(userEmail.join(','), alertTitle, alertDesc);
+            // 记录告警日志
+            yield this.ctx.service.alertLog.createOne({
+              pid: k,
+              title: alertTitle,
+              desc: alertDesc
+            });
           }
         }
       }

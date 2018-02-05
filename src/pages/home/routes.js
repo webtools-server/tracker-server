@@ -17,6 +17,7 @@ import Dashboard from 'routes/dashboard/index.vue';
 import ProjectList from 'routes/project/list.vue';
 import ProjectCreate from 'routes/project/create.vue';
 import ProjectAlert from 'routes/project/alert.vue';
+import ProjectAlertLog from 'routes/project/alert_log.vue';
 
 import UserList from 'routes/user/list.vue';
 import UserCreate from 'routes/user/create.vue';
@@ -64,6 +65,13 @@ const routes = [
             component: ProjectList,
             name: 'projectList',
             title: '列表',
+            imgUrl: 'https://o0p2g4ul8.qnssl.com/vsite%2Fbackground.jpg'
+          },
+          {
+            path: 'log',
+            component: ProjectAlertLog,
+            name: 'projectAlertLog',
+            title: '告警日志',
             imgUrl: 'https://o0p2g4ul8.qnssl.com/vsite%2Fbackground.jpg'
           },
           {

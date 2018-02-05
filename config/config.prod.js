@@ -30,7 +30,7 @@ module.exports = (appInfo) => {
     port: 465,
     auth: {
       user: 'h5tool@jyblife.com',
-      pass: 'H5tool123456'
+      pass: 'Jyb2018'
     }
   };
 

@@ -29,6 +29,7 @@
 
 <script>
 import * as api from '../../api/auth';
+import * as util from '../../utils/util';
 export default {
   data() {
     return {
@@ -61,7 +62,8 @@ export default {
         this.isBtnLoading = false;
 
         if (res.code === 0) {
-          window.location.href = '/';
+          const redirectUrl = decodeURIComponent(util.getQuery('redirect_url') || '');
+          window.location.href = redirectUrl || '/';
         } else {
           this.$message.error(res.msg);
         }

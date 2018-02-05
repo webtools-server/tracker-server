@@ -16,9 +16,9 @@ module.exports = (options) => {
     }
 
     if (!this.session.username) {
-      this.redirect('/auth/login');
+      this.redirect(`/auth/login?redirect_url=${encodeURIComponent(this.request.href)}`);
+    } else {
+      yield next;
     }
-
-    yield next;
   };
 };

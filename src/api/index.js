@@ -122,6 +122,14 @@ export function queryProject(params) {
 }
 
 /**
+ * 查询告警日志
+ * @param {Obejct} [params]
+ */
+export function queryAlertLog(params) {
+  return axiosInstance.get('/alert_log', { params });
+}
+
+/**
  * 创建项目
  * @param {Object} data
  */
