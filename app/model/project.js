@@ -1,5 +1,5 @@
 /**
- * project model
+ * 项目model
  */
 
 module.exports = (app) => {

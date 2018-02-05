@@ -44,21 +44,13 @@ module.exports = (appInfo) => {
 
   // 发送邮件配置
   config.transporter = {
-    // appName: '',
-    // host: '',
-    // secure: true,
-    // port: 465,
-    // auth: {
-    //   user: '',
-    //   pass: ''
-    // }
-    appName: 'tracker',
-    host: 'smtp.exmail.qq.com',
+    appName: '',
+    host: '',
     secure: true,
     port: 465,
     auth: {
-      user: 'h5tool@jyblife.com',
-      pass: 'H5tool123456'
+      user: '',
+      pass: ''
     }
   };
 

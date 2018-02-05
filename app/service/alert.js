@@ -233,11 +233,17 @@ module.exports = (app) => {
           const userEmail = userInfo.map(u => u.email);
 
           if (userEmail.length) {
-            yield this.ctx.service.sendMsg.sendEmail(
-              userEmail.join(','),
-              `项目${k}命中${currRule.length}条告警规则`,
-              currRule.map(rule => this.normalizeAlertInfo(rule)).join('<br>')
-            );
+            const alertTitle = `项目${k}命中${currRule.length}条告警规则`;
+            const alertDesc = currRule.map(rule => this.normalizeAlertInfo(rule)).join('<br>');
+
+            // 发送告警邮件
+            yield this.ctx.service.sendMsg.sendEmail(userEmail.join(','), alertTitle, alertDesc);
+            // 记录告警日志
+            yield this.ctx.service.alertLog.createOne({
+              pid: k,
+              title: alertTitle,
+              desc: alertDesc
+            });
           }
         }
       }

@@ -46,6 +46,9 @@ module.exports = (app) => {
   app.put('/api/v1/alert_rule/:id', 'apiV1.alertRule.putOne');
   app.get('/api/v1/alert_rule/project/:pid', 'apiV1.alertRule.queryByPid');
 
+  // 告警日志
+  app.get('/api/v1/alert_log', 'apiV1.alertLog.query');
+
   // 用户
   app.post('/api/v1/user', 'apiV1.user.createOne');
   app.delete('/api/v1/user/:id', 'apiV1.user.deleteOne');
