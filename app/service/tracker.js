@@ -73,47 +73,55 @@ module.exports = (app) => {
 
     * getDim(trackerType, date) {
       const commonSql = `select count(*) from access_app_tracker.app_evt-${date}/push where op_type='error' and op_params.t_type=${trackerType}`;
-      const sqlNetwork = `${commonSql} GROUP BY op_params.network`;
-      const sqlPlatform = `${commonSql} GROUP BY op_params.platform`;
-
       // common
       const commonData = yield this.request(commonSql);
       const commonTotal = !commonData.error ? commonData.hits.total : 0;
 
       // network
-      const networkData = yield this.request(sqlNetwork);
-      const networkTotal = !networkData.error ? networkData.aggregations['op_params.network'].buckets : [];
+      const networkData = yield this.getDimData({
+        commonSql,
+        commonTotal,
+        dataSet: ['cellular', 'wwan', 'wifi', '4G', '3G', '2G'],
+        key: 'network'
+      });
 
       // platform
-      const platformData = yield this.request(sqlPlatform);
-      const platformTotal = !platformData.error ? platformData.aggregations['op_params.platform'].buckets : [];
+      const platformData = yield this.getDimData({
+        commonSql,
+        commonTotal,
+        dataSet: ['android', 'ios'],
+        key: 'platform'
+      });
 
       return {
-        network: getDimArr(networkTotal, commonTotal),
-        platform: getDimArr(platformTotal, commonTotal)
+        network: networkData,
+        platform: platformData
       };
+    }
 
-      function getDimArr(total, ctotal) {
-        let docCount = 0;
-
-        return total.reduce((arr, item, i) => {
-          docCount += item.doc_count;
-          arr.push({
-            name: item.key,
-            value: item.doc_count
-          });
-
-          // 如果是最后一个项，并且小于commonTotal
-          if (i === total.length - 1 && docCount < ctotal) {
-            arr.push({
-              name: 'other',
-              value: ctotal - docCount
-            });
-          }
-
-          return arr;
-        }, []);
+    * getDimData(options) {
+      const { dataSet, key, commonSql, commonTotal } = options;
+      const dimData = [];
+      let total = 0;
+      for (let i = 0, len = dataSet.length; i < len; i++) {
+        const currentKey = dataSet[i];
+        const currentData = yield this.request(`${commonSql} and op_params.${key}='${currentKey}'`);
+        const currentTotal = !currentData.error ? currentData.hits.total : 0;
+        total += currentTotal;
+        dimData.push({
+          name: currentKey,
+          value: currentTotal
+        });
       }
+
+      if (total < commonTotal) {
+        dimData.push({
+          name: 'other',
+          value: commonTotal - total
+        });
+      }
+
+      return dimData;
     }
 
     * getAllData(type, isNew = false) {

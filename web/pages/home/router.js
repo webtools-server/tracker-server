@@ -63,6 +63,7 @@ const routes = [
             path: 'create',
             name: 'projectCreate',
             title: '新建/编辑',
+            hidden: true,
             component: ProjectCreate,
             imgUrl: defaultImgUrl
           },
@@ -70,7 +71,7 @@ const routes = [
             path: 'list',
             component: ProjectList,
             name: 'projectList',
-            title: '列表',
+            title: '项目列表',
             imgUrl: defaultImgUrl
           },
           {
