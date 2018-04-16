@@ -1,12 +1,12 @@
 {% extends "layout.html" %}
 
 {% block head %}
-  {{ helper.require("css/home.css") }}
-  {{ helper.require("css/home.vue.css") }}
+  {{ helper.assets.getStyle("css/home.css") | safe }}
+  {{ helper.assets.getStyle("css/home.vue.css") | safe }}
 {% endblock %}
 
 {% block body %}
-  <input id="__VIEW_STATE__" type="hidden" value="{{viewState | dump}}">
+  {{ helper.assets.getViewState() | safe }}
   <div id=app></div>
-  {{ helper.require("js/home.js") }}
+  {{ helper.assets.getScript("js/home.js") | safe }}
 {% endblock %}

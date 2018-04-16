@@ -7,6 +7,11 @@ exports.nunjucks = {
   package: 'egg-view-nunjucks'
 };
 
+exports.viewJyb = {
+  enable: true,
+  package: '@jyb/egg-view-jyb',
+};
+
 exports.sequelize = {
   enable: true,
   package: 'egg-sequelize'

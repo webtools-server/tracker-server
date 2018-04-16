@@ -20,7 +20,7 @@ module.exports = (appInfo) => {
     database: 'fe_tracker',
     host: '127.0.0.1',
     username: 'root',
-    password: 'canye2017',
+    password: 'root123'
   };
 
   return config;
