@@ -9,11 +9,10 @@
       <!-- filters start -->
       <div class="filters" @keyup.enter="handleSearch">
         <div class="filter">
-          用户名：
-          <el-input placeholder="用户名" v-model="filters.username"></el-input>
+          产品ID：
+          <tk-project-select v-model="filters.pid"></tk-project-select>
         </div>
         <el-button type="primary" @click="handleSearch()">搜索</el-button>
-        <el-button type="success" @click="handleCreate()">创建用户</el-button>
       </div>
       <!-- filters end -->
 
@@ -21,17 +20,37 @@
       <el-table :data="list" ref="table" style="width: 100%" element-loading-text="拼命加载中"
         stripe
         v-loading="loading">
-        <el-table-column prop="username" label="用户名"></el-table-column>
-        <el-table-column prop="email" label="邮箱"></el-table-column>
-        <el-table-column prop="weixin" label="微信ID"></el-table-column>
-        <el-table-column prop="updated_at" label="修改时间" :formatter="formatDate"></el-table-column>
-        <el-table-column :context="_self" inline-template label="操作" width="260">
+        <el-table-column type="expand">
+          <template scope="props">
+            <el-form label-position="left" inline>
+              <el-form-item label="日志详情：">
+                <span v-html="props.row.desc"></span>
+              </el-form-item>
+            </el-form>
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="产品ID">
+          <template scope="scope">
+            <a class="table-link_default" title="告警规则详情" href="javascript:;" @click="handleAlertRule(scope.row)">{{ scope.row.pid }}</a>
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="日志标题"
+          prop="title">
+        </el-table-column>
+        <el-table-column
+          label="时间"
+          prop="created_at"
+          :formatter="formatDate">
+        </el-table-column>
+        <!-- <el-table-column :context="_self" inline-template label="操作">
           <div>
             <el-button type="info" size="small" @click="handleEdit($index, row)">编辑</el-button>
-            <el-button type="success" size="small" @click="handleChangePwd($index, row)">修改密码</el-button>
+            <el-button type="warning" size="small" @click="handleAlert($index, row)">告警</el-button>
             <el-button type="danger" size="small" @click="handleDelete($index, row)">删除</el-button>
           </div>
-        </el-table-column>
+        </el-table-column> -->
       </el-table>
       <!-- table end  -->
 
@@ -51,7 +70,7 @@
 </template>
 
 <script>
-import * as api from '../../api';
+import * as api from '@/api';
 import moment from 'moment';
 
 export default {
@@ -64,7 +83,7 @@ export default {
       pageSize: 0,
       loading: true,
       filters: {
-        username: ''
+        pid: ''
       }
     };
   },
@@ -82,32 +101,8 @@ export default {
       this.redirect();
     },
 
-    handleCreate() {
-      this.$router.push({ path: '/user/create' });
-    },
-
-    handleEdit(index, row) {
-      this.$router.push({ path: `/user/edit/${row.id}` });
-    },
-
-    handleChangePwd(index, row) {
-      this.$router.push({ path: `/user/changepwd/${row.id}` });
-    },
-
-    handleDelete(index, row) {
-      this.$confirm('确定要删除吗?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'info'
-      }).then(() => {
-        api.deleteUser(row.id).then((res) => {
-          if (res.code !== 0) {
-            this.$message({ message: res.msg, type: 'error' });
-          } else {
-            this.fetchData();
-          }
-        });
-      }).catch(() => {});
+    handleAlertRule(row) {
+      this.$router.push({ path: `/project/alert/${row.pid}` });
     },
 
     handleCurrentChange(val) {
@@ -143,9 +138,9 @@ export default {
       const page = parseInt(query.page, 10) || this.firstPage;
 
       this.loading = true;
-      api.fetchUserList({
+      api.queryAlertLog({
         page,
-        username: this.filters.username
+        pid: this.filters.pid
       }).then((res) => {
         // lazy render data
         this.list = res.data.list;
@@ -162,3 +157,9 @@ export default {
   }
 };
 </script>
+<style lang="scss">
+.table-link_default {
+  color: #20a0ff;
+}
+</style>
+

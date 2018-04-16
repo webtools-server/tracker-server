@@ -60,8 +60,8 @@
 </template>
 
 <script>
-import viewState from '../../utils/view_state';
-import avatarImg from '../../assets/img/avatar.png'
+import viewState from '@/utils/view_state';
+import avatarImg from '@/assets/img/avatar.png'
 
 export default {
   data() {

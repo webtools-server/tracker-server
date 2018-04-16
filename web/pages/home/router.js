@@ -3,25 +3,28 @@
  */
 
 import Vue from 'vue';
-import Abstract from 'routes/common/abstract.vue';
-import NotFound from 'routes/common/404.vue';
-import Help from 'routes/help/index.vue';
+import VueRouter from 'vue-router';
+import Abstract from './modules/common/abstract.vue';
+import NotFound from './modules/common/404.vue';
+import Help from './modules/help/index.vue';
 
-import ErrorDetailComp from 'routes/error/detail.vue';
-import ApiStatComp from 'routes/api/stat.vue';
-import ApiDetailComp from 'routes/api/detail.vue';
-import PerfDetailComp from 'routes/perf/detail.vue';
+import ErrorDetailComp from './modules/error/detail.vue';
+import ApiStatComp from './modules/api/stat.vue';
+import ApiDetailComp from './modules/api/detail.vue';
+import PerfDetailComp from './modules/perf/detail.vue';
 
-import Dashboard from 'routes/dashboard/index.vue';
+import Dashboard from './modules/dashboard/index.vue';
 
-import ProjectList from 'routes/project/list.vue';
-import ProjectCreate from 'routes/project/create.vue';
-import ProjectAlert from 'routes/project/alert.vue';
-import ProjectAlertLog from 'routes/project/alert_log.vue';
+import ProjectList from './modules/project/list.vue';
+import ProjectCreate from './modules/project/create.vue';
+import ProjectAlert from './modules/project/alert.vue';
+import ProjectAlertLog from './modules/project/alert_log.vue';
 
-import UserList from 'routes/user/list.vue';
-import UserCreate from 'routes/user/create.vue';
-import UserChangePwd from 'routes/user/changepwd.vue';
+import UserList from './modules/user/list.vue';
+import UserCreate from './modules/user/create.vue';
+import UserChangePwd from './modules/user/changepwd.vue';
+
+Vue.use(VueRouter);
 
 const root = Vue.component('root', {
   template: '<router-view></router-view>'
@@ -227,4 +230,10 @@ function addMetaTitle(arr) {
   }
 }
 
-export default routes;
+const router = new VueRouter({
+  routes,
+  mode: 'hash',
+  linkActiveClass: 'active'
+});
+
+export default router;

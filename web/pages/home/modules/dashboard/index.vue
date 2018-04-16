@@ -18,8 +18,8 @@
 
 <script>
 import Chart from './chart.vue';
-import * as api from '../../api';
-import helper from '../../utils/helper';
+import * as api from '@/api';
+import helper from '@/utils/helper';
 
 export default {
   data() {

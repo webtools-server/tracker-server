@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import * as api from '../../api';
+import * as api from '@/api';
 
 export default {
   data() {

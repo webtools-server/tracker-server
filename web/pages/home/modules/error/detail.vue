@@ -139,11 +139,11 @@
 </template>
 
 <script>
-import '../../assets/sass/list.scss';
+import '../../../../assets/sass/list.scss';
 
-import * as api from '../../api';
+import * as api from '@/api';
 import moment from 'moment';
-import * as sourceMap from '../../utils/sourcemap';
+import * as sourceMap from '@/utils/sourcemap';
 
 export default {
   data() {

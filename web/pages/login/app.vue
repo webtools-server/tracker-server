@@ -28,8 +28,8 @@
 </template>
 
 <script>
-import * as api from '../../api/auth';
-import * as util from '../../utils/util';
+import * as api from '@/api/auth';
+import * as util from '@/utils/util';
 export default {
   data() {
     return {

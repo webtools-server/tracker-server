@@ -50,7 +50,7 @@
 </template>
 
 <script>
-import * as api from '../../api';
+import * as api from '@/api';
 import moment from 'moment';
 
 export default {

@@ -35,7 +35,7 @@
     "stop:scripts": "egg-scripts stop",
     "dev": "egg-bin dev --port=7002",
     "watch": "jfet build -w",
-    "build": "jfet build",
+    "build": "NODE_ENV=production jfet build",
     "release": "sh release.sh",
     "test": "npm run lint -- --fix && npm run test-local",
     "test-local": "egg-bin test",

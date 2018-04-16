@@ -79,10 +79,10 @@
 </template>
 
 <script>
-import '../../assets/sass/list.scss';
+import '../../../../assets/sass/list.scss';
 
-import * as api from '../../api';
-import { apiFields } from '../../utils/fields_map';
+import * as api from '@/api';
+import { apiFields } from '@/utils/fields_map';
 import echarts from 'echarts';
 import moment from 'moment';
 

@@ -71,9 +71,9 @@
 </template>
 
 <script>
-import * as api from '../../api';
-import AlertRuleDialog from 'components/alert_rule/dialog.vue';
-import AlertRuleList from 'components/alert_rule/list.vue';
+import * as api from '@/api';
+import AlertRuleDialog from '@/components/alert_rule/dialog.vue';
+import AlertRuleList from '@/components/alert_rule/list.vue';
 
 export default {
   components: {

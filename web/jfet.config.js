@@ -16,8 +16,8 @@ module.exports = {
         publicPath: '/'
       },
       resolveAliases: {
+        '@': path.join(__dirname),
         vue$: 'vue/dist/vue.common.js',
-        src: path.join(__dirname),
         assets: path.join(__dirname, 'assets'),
         routes: path.join(__dirname, 'routes'),
         components: path.join(__dirname, 'components')

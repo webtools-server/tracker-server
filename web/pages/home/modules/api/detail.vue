@@ -132,9 +132,9 @@
 </template>
 
 <script>
-import '../../assets/sass/list.scss';
+import '../../../../assets/sass/list.scss';
 
-import * as api from '../../api';
+import * as api from '@/api';
 import moment from 'moment';
 
 export default {

@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import * as api from '../../api';
+import * as api from '@/api';
 
 const API_THRESHOLD = 3000;
 const SLOW_RESPONSE_TIME = 10000;
