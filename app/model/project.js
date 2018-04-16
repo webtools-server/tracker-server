@@ -35,6 +35,10 @@ module.exports = (app) => {
     alert_user: {
       type: STRING,
       comment: '告警用户ID列表'
+    },
+    default_alert_rule: {
+      type: STRING,
+      comment: '默认告警规则'
     }
   }, {
     tableName: 'project',

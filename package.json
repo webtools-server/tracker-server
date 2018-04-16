@@ -1,25 +1,20 @@
 {
   "name": "tracker-server",
-  "version": "1.1.0",
-  "description": "前端数据服务",
+  "version": "1.0.0",
+  "description": "前端监控后台",
   "private": true,
   "dependencies": {
-    "axios": "^0.15.2",
-    "echarts": "^3.4.0",
+    "@jyb/egg-view-jyb": "^1.0.3",
     "egg": "^1.7.0",
     "egg-scripts": "^1.0.0",
     "egg-sequelize": "^3.1.0",
+    "egg-validate": "^1.0.0",
     "egg-view-nunjucks": "^2.1.3",
-    "element-ui": "^1.0.0",
-    "font-awesome": "^4.7.0",
-    "fs-extra": "^4.0.1",
     "moment": "^2.17.1",
     "moment-range": "^3.0.3",
     "mysql2": "^1.4.2",
     "nodemailer": "^4.4.2",
-    "source-map": "^0.6.0",
-    "vue": "^2.0.1",
-    "vue-router": "^2.0.3"
+    "source-map": "^0.6.0"
   },
   "devDependencies": {
     "@jyb/eslint-config-jyb": "^1.0.1",
@@ -41,7 +36,7 @@
     "stop:scripts": "egg-scripts stop",
     "dev": "egg-bin dev --port=7002",
     "watch": "jfet build -w",
-    "build": "jfet build",
+    "build": "NODE_ENV=production jfet build",
     "release": "sh release.sh",
     "test": "npm run lint -- --fix && npm run test-local",
     "test-local": "egg-bin test",
@@ -56,6 +51,9 @@
   "repository": {
     "type": "git",
     "url": ""
+  },
+  "jfetOptions": {
+    "configFilePath": "web"
   },
   "author": "canye.wu@jyblife.com",
   "license": "MIT"

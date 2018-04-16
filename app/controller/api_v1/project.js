@@ -10,10 +10,14 @@ module.exports = (app) => {
   class ProjectController extends app.Controller {
     * createOne() {
       const ctx = this.ctx;
-      const { pid, title, apiThreshold, slowResponseTime } = ctx.request.body;
+      const { pid, title, apiThreshold, slowResponseTime, alertUser } = ctx.request.body;
+      const defaultAlertRule = ctx.request.body.defaultAlertRule || '';
 
       if (!pid || !title) {
-        ctx.body = { code: RET_CODE.ERROR, msg: 'pid或者title不能为空' };
+        ctx.body = {
+          code: RET_CODE.ERROR,
+          msg: 'pid或者title不能为空'
+        };
         return;
       }
 
@@ -22,13 +26,37 @@ module.exports = (app) => {
         title,
         api_threshold: apiThreshold,
         slow_response_time: slowResponseTime,
-        owner: ctx.session.username
+        owner: ctx.session.username,
+        default_alert_rule: defaultAlertRule,
+        alert_user: alertUser || ''
       });
 
       if (!util.isError(result)) {
-        ctx.body = { code: RET_CODE.OK, data: result };
+        // 把默认规则添加到告警规则
+        const defaultAlertRuleRows = yield ctx.service.defaultRule.findById(defaultAlertRule.split(','));
+        yield ctx.service.alertRule.bulkCreate(defaultAlertRuleRows.map((row) => {
+          return {
+            pid,
+            type: row.type,
+            title: row.title,
+            field_name: row.field_name,
+            field_action: row.field_action,
+            field_value: row.field_value,
+            stat_type: row.stat_type,
+            stat_action: row.stat_action,
+            stat_value: row.stat_value
+          };
+        }));
+
+        ctx.body = {
+          code: RET_CODE.OK,
+          data: result
+        };
       } else {
-        ctx.body = { code: RET_CODE.ERROR, msg: result.toString() };
+        ctx.body = {
+          code: RET_CODE.ERROR,
+          msg: result.toString()
+        };
       }
     }
 
@@ -82,7 +110,7 @@ module.exports = (app) => {
 
     * putOne() {
       const ctx = this.ctx;
-      const { pid, title, apiThreshold, slowResponseTime } = ctx.request.body;
+      const { pid, title, apiThreshold, slowResponseTime, defaultAlertRule, alertUser } = ctx.request.body;
 
       if (!pid || !title) {
         ctx.body = { code: RET_CODE.ERROR, msg: 'pid或者title不能为空' };
@@ -95,7 +123,9 @@ module.exports = (app) => {
           pid,
           title,
           api_threshold: apiThreshold,
-          slow_response_time: slowResponseTime
+          slow_response_time: slowResponseTime,
+          default_alert_rule: defaultAlertRule || '',
+          alert_user: alertUser || ''
         }
       );
 
