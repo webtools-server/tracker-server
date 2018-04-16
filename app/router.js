@@ -40,6 +40,12 @@ module.exports = (app) => {
   app.get('/api/v1/field/data', 'apiV1.field.getFieldsData');
   app.get('/api/v1/field/:type?', 'apiV1.field.getFields');
 
+  // 默认规则
+  app.get('/api/v1/default_rule', 'apiV1.defaultRule.query');
+  app.post('/api/v1/default_rule', 'apiV1.defaultRule.createOne');
+  app.delete('/api/v1/default_rule/:id', 'apiV1.defaultRule.deleteOne');
+  app.put('/api/v1/default_rule/:id', 'apiV1.defaultRule.putOne');
+
   // 告警规则
   app.post('/api/v1/alert_rule', 'apiV1.alertRule.createOne');
   app.delete('/api/v1/alert_rule/:id', 'apiV1.alertRule.deleteOne');

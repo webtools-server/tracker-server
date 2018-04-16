@@ -19,6 +19,7 @@ import ProjectList from './modules/project/list.vue';
 import ProjectCreate from './modules/project/create.vue';
 import ProjectAlert from './modules/project/alert.vue';
 import ProjectAlertLog from './modules/project/alert_log.vue';
+import ProjectDefaultAlert from './modules/project/default_rule.vue';
 
 import UserList from './modules/user/list.vue';
 import UserCreate from './modules/user/create.vue';
@@ -29,6 +30,8 @@ Vue.use(VueRouter);
 const root = Vue.component('root', {
   template: '<router-view></router-view>'
 });
+
+const defaultImgUrl = 'https://o0p2g4ul8.qnssl.com/vsite%2Fbackground.jpg';
 
 const routes = [
   {
@@ -61,21 +64,28 @@ const routes = [
             name: 'projectCreate',
             title: '新建/编辑',
             component: ProjectCreate,
-            imgUrl: 'https://o0p2g4ul8.qnssl.com/vsite%2Fbackground.jpg'
+            imgUrl: defaultImgUrl
           },
           {
             path: 'list',
             component: ProjectList,
             name: 'projectList',
             title: '列表',
-            imgUrl: 'https://o0p2g4ul8.qnssl.com/vsite%2Fbackground.jpg'
+            imgUrl: defaultImgUrl
+          },
+          {
+            path: 'defaultRule',
+            component: ProjectDefaultAlert,
+            name: 'ProjectDefaultAlert',
+            title: '默认规则',
+            imgUrl: defaultImgUrl
           },
           {
             path: 'log',
             component: ProjectAlertLog,
             name: 'projectAlertLog',
             title: '告警日志',
-            imgUrl: 'https://o0p2g4ul8.qnssl.com/vsite%2Fbackground.jpg'
+            imgUrl: defaultImgUrl
           },
           {
             path: 'alert/:pid',
@@ -83,7 +93,7 @@ const routes = [
             name: 'projectAlert',
             title: '告警',
             hidden: true,
-            imgUrl: 'https://o0p2g4ul8.qnssl.com/vsite%2Fbackground.jpg'
+            imgUrl: defaultImgUrl
           }
         ]
       },
@@ -99,7 +109,7 @@ const routes = [
             name: 'userCreate',
             title: '新建',
             component: UserCreate,
-            imgUrl: 'https://o0p2g4ul8.qnssl.com/vsite%2Fbackground.jpg'
+            imgUrl: defaultImgUrl
           },
           {
             path: 'edit/:id',
@@ -107,14 +117,14 @@ const routes = [
             title: '编辑',
             component: UserCreate,
             hidden: true,
-            imgUrl: 'https://o0p2g4ul8.qnssl.com/vsite%2Fbackground.jpg'
+            imgUrl: defaultImgUrl
           },
           {
             path: 'list',
             component: UserList,
             name: 'userList',
             title: '列表',
-            imgUrl: 'https://o0p2g4ul8.qnssl.com/vsite%2Fbackground.jpg'
+            imgUrl: defaultImgUrl
           },
           {
             path: 'changepwd/:id',
@@ -122,7 +132,7 @@ const routes = [
             name: 'UserChangePwd',
             title: '修改密码',
             hidden: true,
-            imgUrl: 'https://o0p2g4ul8.qnssl.com/vsite%2Fbackground.jpg'
+            imgUrl: defaultImgUrl
           }
         ]
       },
@@ -138,14 +148,14 @@ const routes = [
           //   name: 'errorStat',
           //   title: '统计',
           //   component: ErrorStatComp,
-          //   imgUrl: 'https://o0p2g4ul8.qnssl.com/vsite%2Fbackground.jpg'
+          //   imgUrl: defaultImgUrl
           // },
           {
             path: 'detail',
             name: 'errorDetail',
             title: '明细',
             component: ErrorDetailComp,
-            imgUrl: 'https://o0p2g4ul8.qnssl.com/vsite%2Fbackground.jpg'
+            imgUrl: defaultImgUrl
           }
         ]
       },
@@ -161,14 +171,14 @@ const routes = [
             name: 'apiStat',
             title: '统计',
             component: ApiStatComp,
-            imgUrl: 'https://o0p2g4ul8.qnssl.com/vsite%2Fbackground.jpg'
+            imgUrl: defaultImgUrl
           },
           {
             path: 'detail',
             name: 'apiDetail',
             title: '明细',
             component: ApiDetailComp,
-            imgUrl: 'https://o0p2g4ul8.qnssl.com/vsite%2Fbackground.jpg'
+            imgUrl: defaultImgUrl
           }
         ]
       },
@@ -184,14 +194,14 @@ const routes = [
           //   name: 'perfStat',
           //   title: '统计',
           //   component: PerfStatComp,
-          //   imgUrl: 'https://o0p2g4ul8.qnssl.com/vsite%2Fbackground.jpg'
+          //   imgUrl: defaultImgUrl
           // },
           {
             path: 'detail',
             name: 'perfDetail',
             title: '明细',
             component: PerfDetailComp,
-            imgUrl: 'https://o0p2g4ul8.qnssl.com/vsite%2Fbackground.jpg'
+            imgUrl: defaultImgUrl
           }
         ]
       },

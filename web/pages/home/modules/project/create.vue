@@ -5,21 +5,31 @@
     <!-- breadcrumb end  -->
 
     <div class="db-content-inner" @keyup.enter="handleSubmit">
-      <el-form :rules="rules" ref="form" :model="form" label-width="120px">
-        <el-form-item label="产品ID" prop="pid">
-           <el-input :disabled="!isCreate" placeholder="请输入产品ID" v-model="form.pid"></el-input>
+      <el-form :rules="rules" ref="form" :model="form" label-width="140px">
+        <el-form-item label="产品ID：" prop="pid">
+          <el-input :disabled="!isCreate" placeholder="请输入产品ID" v-model="form.pid"></el-input>
         </el-form-item>
 
-        <el-form-item label="产品名称" prop="title">
-           <el-input placeholder="请输入产品名称" v-model="form.title"></el-input>
+        <el-form-item label="产品名称：" prop="title">
+          <el-input placeholder="请输入产品名称" v-model="form.title"></el-input>
         </el-form-item>
 
-        <el-form-item label="超时响应时间" prop="apiThreshold">
-           <el-input placeholder="请输入超时响应时间(ms)" v-model="form.apiThreshold"></el-input>
+        <el-form-item label="超时响应时间：" prop="apiThreshold">
+          <el-input placeholder="请输入超时响应时间(ms)" v-model="form.apiThreshold"></el-input>
         </el-form-item>
 
-        <el-form-item label="最慢响应时间" prop="slowResponseTime">
-           <el-input placeholder="请输入最慢响应时间(ms)" v-model="form.slowResponseTime"></el-input>
+        <el-form-item label="最慢响应时间：" prop="slowResponseTime">
+          <el-input placeholder="请输入最慢响应时间(ms)" v-model="form.slowResponseTime"></el-input>
+        </el-form-item>
+
+        <el-form-item v-if="isCreate" label="告警规则：" prop="alertRule">
+          <el-checkbox-group v-model="form.defaultAlertRule">
+            <el-checkbox
+              v-for="(item, index) in defaultRules"
+              :label="item.id"
+              :key="index"
+            >{{item.title}}</el-checkbox>
+          </el-checkbox-group>
         </el-form-item>
 
         <el-form-item>
@@ -40,12 +50,15 @@ const SLOW_RESPONSE_TIME = 10000;
 export default {
   data() {
     return {
+      checkList: ['a', 'c'],
       form: {
         pid: '',
         title: '',
         apiThreshold: API_THRESHOLD,
-        slowResponseTime: SLOW_RESPONSE_TIME
+        slowResponseTime: SLOW_RESPONSE_TIME,
+        defaultAlertRule: []
       },
+      defaultRules: [],
       rules: {
         pid: [
           { required: true, message: '请输入产品ID', trigger: 'blur' }
@@ -63,17 +76,34 @@ export default {
     // 如果pid有值，则是编辑
     if (qs.pid) {
       this.isCreate = false;
-      api.queryProject(qs.pid).then((res) => {
-        if (res.code !== 0) {
-          this.$message({ message: res.msg, type: 'error' });
-          this.$router.push({ path: '/project/list' });
-        } else {
-          const resData = res.data;
+      Promise.all([
+        api.queryDefaultRule(),
+        api.queryProject(qs.pid)
+      ]).then((result) => {
+        const rules = result[0];
+        const project = result[1];
+
+        if (rules.code === 0) {
+          this.defaultRules = rules.data;
+        }
+
+        if (project.code === 0) {
+          const resData = project.data;
 
           this.form.pid = resData.pid;
           this.form.title = resData.title;
           this.form.apiThreshold = resData.api_threshold;
           this.form.slowResponseTime = resData.slow_response_time;
+          this.form.defaultAlertRule = resData.default_alert_rule ? resData.default_alert_rule.split(',').map(rule => parseInt(rule, 10)) : [];
+        } else {
+          this.$message({ message: res.msg, type: 'error' });
+          this.$router.push({ path: '/project/list' });
+        }
+      });
+    } else {
+      api.queryDefaultRule().then((res) => {
+        if (res.code === 0) {
+          this.defaultRules = res.data;
         }
       });
     }
@@ -86,7 +116,10 @@ export default {
           return false;
         } else {
           const qs = this.$route.query;
-          const apiMethod = qs.pid ? api.saveProject(qs.pid, this.form) : api.createProject(this.form);
+          const formData = Object.assign({}, this.form, {
+            defaultAlertRule: (this.form.defaultAlertRule || []).join(',') // 处理下aletRule
+          });
+          const apiMethod = qs.pid ? api.saveProject(qs.pid, formData) : api.createProject(formData);
 
           apiMethod.then((res) => {
             if (res.code === 0) {
@@ -109,7 +142,7 @@ export default {
 <style lang="scss" scoped>
 #big-form {
   .el-form {
-    width: 400px;
+    width: 500px;
   }
 }
 </style>

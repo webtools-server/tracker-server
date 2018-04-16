@@ -8,6 +8,13 @@ module.exports = (app) => {
       return yield this.ctx.model.AlertRule.create(data);
     }
 
+    * bulkCreate(records) {
+      if (Array.isArray(records)) {
+        return yield this.ctx.model.AlertRule.bulkCreate(records);
+      }
+      return Promise.resolve({});
+    }
+
     * findAll(where) {
       return yield this.ctx.model.AlertRule.findAll({
         where,

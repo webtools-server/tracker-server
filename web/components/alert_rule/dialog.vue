@@ -67,8 +67,10 @@
     <div class="rule-desc">
       <span class="rule-desc-label ui-fl-l">规则描述：</span>
       <span class="rule-desc-content ui-fl-l">
-        <span class="color-ff0000">{{project.pid}}</span>
-        <span>的</span>
+        <template v-if="project">
+          <span class="color-ff0000">{{project.pid ? project.pid : '---'}}</span>
+          <span>的</span>
+        </template>
         <span class="color-ff0000">{{ruleTypeLabel[ruleForm.type] || '{type}'}}</span>
         <span>上报记录中</span>
         <span class="color-ff0000">
@@ -111,15 +113,15 @@ export default {
     },
     rule: {
       type: Object,
-      default: {}
+      default: () => {}
     },
     project: {
       type: Object,
-      default: {}
+      default: () => {}
     },
     fields: {
       type: Object,
-      default: {}
+      default: () => {}
     }
   },
   data () {

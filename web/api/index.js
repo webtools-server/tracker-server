@@ -214,6 +214,38 @@ export function deleteUser(id) {
 }
 
 /**
+ * 创建默认规则
+ * @param {Object} data
+ */
+export function createDefaultRule(data = {}) {
+  return axiosInstance.post('/default_rule', data);
+}
+
+/**
+ * 修改默认规则
+ * @param {String} id
+ * @param {Object} data
+ */
+export function saveDefaultRule(id, data = {}) {
+  return axiosInstance.put(`/default_rule/${id}`, data);
+}
+
+/**
+ * 查询默认规则
+ */
+export function queryDefaultRule() {
+  return axiosInstance.get('/default_rule');
+}
+
+/**
+ * 删除默认规则
+ * @param {String} id
+ */
+export function deleteDefaultRule(id) {
+  return axiosInstance.delete(`/default_rule/${id}`);
+}
+
+/**
  * 创建告警规则
  * @param {Object} data
  */
