@@ -32,6 +32,22 @@
           </el-checkbox-group>
         </el-form-item>
 
+        <el-form-item label="联系人：" prop="alertUser">
+          <el-select
+            v-model="form.alertUser"
+            multiple
+            filterable
+            remote
+            placeholder="请输入用户名">
+            <el-option
+              v-for="item in userList"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </el-form-item>
+
         <el-form-item>
           <el-button type="primary" @click="handleSubmit">保存</el-button>
         </el-form-item>
@@ -56,9 +72,11 @@ export default {
         title: '',
         apiThreshold: API_THRESHOLD,
         slowResponseTime: SLOW_RESPONSE_TIME,
-        defaultAlertRule: []
+        defaultAlertRule: [],
+        alertUser: []
       },
       defaultRules: [],
+      userList: [],
       rules: {
         pid: [
           { required: true, message: '请输入产品ID', trigger: 'blur' }
@@ -72,21 +90,42 @@ export default {
   },
   created() {
     const qs = this.$route.query;
+    let it = [];
 
     // 如果pid有值，则是编辑
     if (qs.pid) {
       this.isCreate = false;
-      Promise.all([
+      it = [
         api.queryDefaultRule(),
+        api.fetchUserList({ all: 666 }),
         api.queryProject(qs.pid)
-      ]).then((result) => {
-        const rules = result[0];
-        const project = result[1];
+      ];
+    } else {
+      it = [
+        api.queryDefaultRule(),
+        api.fetchUserList({ all: 666 })
+      ];
+    }
 
-        if (rules.code === 0) {
-          this.defaultRules = rules.data;
-        }
+    Promise.all(it).then((result) => {
+      const rules = result[0] || {};
+      const userList = result[1] || {};
+      const project = result[2];
 
+      if (rules.code === 0) {
+        this.defaultRules = rules.data;
+      }
+
+      if (userList.code === 0) {
+        this.userList = userList.data.list.map((item) => {
+          return {
+            label: item.username,
+            value: item.id
+          };
+        });
+      }
+
+      if (project) {
         if (project.code === 0) {
           const resData = project.data;
 
@@ -95,18 +134,13 @@ export default {
           this.form.apiThreshold = resData.api_threshold;
           this.form.slowResponseTime = resData.slow_response_time;
           this.form.defaultAlertRule = resData.default_alert_rule ? resData.default_alert_rule.split(',').map(rule => parseInt(rule, 10)) : [];
+          this.form.alertUser = resData.alert_user ? resData.alert_user.split(',').map(user => parseInt(user, 10)) : [];
         } else {
-          this.$message({ message: res.msg, type: 'error' });
+          this.$message({ message: project.msg, type: 'error' });
           this.$router.push({ path: '/project/list' });
         }
-      });
-    } else {
-      api.queryDefaultRule().then((res) => {
-        if (res.code === 0) {
-          this.defaultRules = res.data;
-        }
-      });
-    }
+      }
+    });
   },
   methods: {
     // event
@@ -117,7 +151,8 @@ export default {
         } else {
           const qs = this.$route.query;
           const formData = Object.assign({}, this.form, {
-            defaultAlertRule: (this.form.defaultAlertRule || []).join(',') // 处理下aletRule
+            defaultAlertRule: (this.form.defaultAlertRule || []).join(','), // 处理下aletRule
+            alertUser: (this.form.alertUser || []).join(',') // 处理下alertUser
           });
           const apiMethod = qs.pid ? api.saveProject(qs.pid, formData) : api.createProject(formData);
 

@@ -10,7 +10,7 @@ module.exports = (app) => {
   class ProjectController extends app.Controller {
     * createOne() {
       const ctx = this.ctx;
-      const { pid, title, apiThreshold, slowResponseTime } = ctx.request.body;
+      const { pid, title, apiThreshold, slowResponseTime, alertUser } = ctx.request.body;
       const defaultAlertRule = ctx.request.body.defaultAlertRule || '';
 
       if (!pid || !title) {
@@ -27,7 +27,8 @@ module.exports = (app) => {
         api_threshold: apiThreshold,
         slow_response_time: slowResponseTime,
         owner: ctx.session.username,
-        default_alert_rule: defaultAlertRule
+        default_alert_rule: defaultAlertRule,
+        alert_user: alertUser || ''
       });
 
       if (!util.isError(result)) {
@@ -109,7 +110,7 @@ module.exports = (app) => {
 
     * putOne() {
       const ctx = this.ctx;
-      const { pid, title, apiThreshold, slowResponseTime, defaultAlertRule } = ctx.request.body;
+      const { pid, title, apiThreshold, slowResponseTime, defaultAlertRule, alertUser } = ctx.request.body;
 
       if (!pid || !title) {
         ctx.body = { code: RET_CODE.ERROR, msg: 'pid或者title不能为空' };
@@ -123,7 +124,8 @@ module.exports = (app) => {
           title,
           api_threshold: apiThreshold,
           slow_response_time: slowResponseTime,
-          default_alert_rule: defaultAlertRule || ''
+          default_alert_rule: defaultAlertRule || '',
+          alert_user: alertUser || ''
         }
       );
 
