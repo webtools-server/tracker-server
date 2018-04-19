@@ -1,6 +1,15 @@
+$spaces: 10 16 20 30 40;
+$textColors: 606266 f56c6c ff0000 999;
+$fontSizes: 12;
+
 // Project specific
 @import "../../styles/global";
 @import "../../styles/icon";
+@import "../../styles/mixin";
 
 // third party css
 @import "../../node_modules/element-ui/lib/theme-default/index.css";
+
+@include generateCommSpaces;
+@include generateCommColors;
+@include generateCommFontSize;

@@ -8,12 +8,12 @@
     </dl>
     <dl class="help-step">
       <dt class="help-step-title">第二步：</dt>
-      <dd class="help-step-detail"><a href="http://fe.doc.jyb.com/book/common-lib/packages/lib-tracker/" target="_blank">通过lib-tracker快速接入</a></dd>
-      <dd class="help-step-detail"><a href="http://fe.doc.jyb.com/book/common-lib/packages/lib-tracker/doc/API.html" target="_blank">lib-tracker API</a></dd>
+      <dd class="help-step-detail"><a href="http://doc.fe.jyb.com/book/common-lib/packages/lib-tracker/" target="_blank">通过lib-tracker快速接入</a></dd>
+      <dd class="help-step-detail"><a href="http://doc.fe.jyb.com/book/common-lib/packages/lib-tracker/doc/API.html" target="_blank">lib-tracker API</a></dd>
     </dl>
     <dl class="help-step">
       <dt class="help-step-title">第三步：</dt>
-      <dd class="help-step-detail">使用<a href="http://fe.doc.jyb.com/book/workflow/packages/jfet-build-plugin-ftp/" target="_blank">jfet-build-plugin-ftp</a>插件上传sourcemap文件</dd>
+      <dd class="help-step-detail">使用<a href="http://doc.fe.jyb.com/book/workflow/packages/jfet-build-plugin-ftp/" target="_blank">jfet-build-plugin-ftp</a>插件上传sourcemap文件</dd>
       <dd class="help-step-detail">如果使用jfet-solution-h5act或者jfet-solution-h5product默认已经集成该插件</dd>
     </dl>
   </section>

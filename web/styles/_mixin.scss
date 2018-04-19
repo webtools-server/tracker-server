@@ -1,0 +1,62 @@
+// 常用间距
+@mixin generateCommSpaces {
+  @if length($spaces) > 0 {
+    @each $space in $spaces {
+      .ui-mt-#{$space} {
+        margin-top: $space + 0px;
+      }
+      .ui-mr-#{$space} {
+        margin-right: $space + 0px;
+      }
+      .ui-mb-#{$space} {
+        margin-bottom: $space + 0px;
+      }
+      .ui-ml-#{$space} {
+        margin-left: $space + 0px;
+      }
+      .ui-pt-#{$space} {
+        padding-top: $space + 0px;
+      }
+      .ui-pr-#{$space} {
+        padding-right: $space + 0px;
+      }
+      .ui-pb-#{$space} {
+        padding-bottom: $space + 0px;
+      }
+      .ui-pl-#{$space} {
+        padding-left: $space + 0px;
+      }
+    }
+  }
+  @else {
+    @warn "common space is empty!";
+  }
+}
+
+// 常用颜色
+@mixin generateCommColors {
+  @if length($textColors) > 0 {
+    @each $color in $textColors {
+      .ui-color-#{$color} {
+        color: unquote("#" + $color);
+      }
+    }
+  }
+  @else {
+    @warn "common color is empty!";
+  }
+}
+
+// 常用文字大小
+@mixin generateCommFontSize {
+  @if length($fontSizes) > 0 {
+    @each $fontSize in $fontSizes {
+      .ui-font-#{$fontSize} {
+        font-size: $fontSize + 0px;
+      }
+    }
+  }
+  @else {
+    @warn "common font-size is empty!";
+  }
+}

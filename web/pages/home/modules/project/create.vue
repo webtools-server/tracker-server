@@ -8,6 +8,12 @@
       <el-form :rules="rules" ref="form" :model="form" label-width="140px">
         <el-form-item label="产品ID：" prop="pid">
           <el-input :disabled="!isCreate" placeholder="请输入产品ID" v-model="form.pid"></el-input>
+          <dl class="product-tips" v-if="isCreate">
+            <dt class="product-tips__title">命名规范：</dt>
+            <dd class="product-tips__item">活动：act_[name]_[date]，例如：act_invite_201804</dd>
+            <dd class="product-tips__item">产品：product_[name]_[date]，date可选，例如：product_baina</dd>
+            <dd class="product-tips__item">其他：web_[name]_[date]，date可选，例如：web_risk</dd>
+          </dl>
         </el-form-item>
 
         <el-form-item label="产品名称：" prop="title">
@@ -177,7 +183,34 @@ export default {
 <style lang="scss" scoped>
 #big-form {
   .el-form {
-    width: 500px;
+    width: 600px;
   }
+}
+
+.db-content-inner {
+  .el-checkbox {
+    margin-right: 15px;
+  }
+
+  .el-checkbox+.el-checkbox {
+    margin-left: 0;
+    margin-right: 15px;
+  }
+}
+
+.product-tips {
+  font-size: 12px;
+  color: #999;
+  line-height: 1;
+}
+
+.product-tips__title {
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+
+.product-tips__item {
+  margin-bottom: 8px;
+  margin-left: 10px;
 }
 </style>
