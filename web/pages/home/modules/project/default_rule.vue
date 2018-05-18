@@ -46,9 +46,11 @@ export default {
     return {
       dialogRuleVisible: false,
       fields: {},
+      originRuleForm: {}, // 原来的ruleForm
       ruleForm: {
         type: '',
         title: '',
+        minutes: '5',
         fieldName: '',
         fieldAction: '',
         fieldValue: '',
@@ -62,6 +64,7 @@ export default {
     };
   },
   created() {
+    this.originRuleForm = Object.assign({}, this.ruleForm);
     Promise.all([
       api.getFields(),
       api.queryDefaultRule()
@@ -111,8 +114,7 @@ export default {
     handleAddRule() {
       const ruleForm = {};
       this.isCreate = true;
-      Object.keys(this.ruleForm).forEach(rule => ruleForm[rule] = '');
-      this.ruleForm = ruleForm;
+      this.ruleForm = Object.assign({}, this.originRuleForm);
       this.dialogRuleVisible = true;
     },
 
@@ -142,6 +144,7 @@ export default {
         id: row.id,
         type: row.type.toString(),
         title: row.title,
+        minutes: (row.minutes || '').toString(),
         fieldName: row.field_name.toString(),
         fieldAction: row.field_action.toString(),
         fieldValue: row.field_value,

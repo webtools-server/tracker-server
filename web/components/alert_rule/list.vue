@@ -7,6 +7,8 @@
     </el-table-column>
     <el-table-column prop="title" label="规则名称" width="160">
     </el-table-column>
+    <el-table-column prop="minutes" label="最近N分钟" width="120">
+    </el-table-column>
     <el-table-column prop="field_name" :formatter="getFieldsName" label="字段名称" width="130">
     </el-table-column>
     <el-table-column prop="field_action" :formatter="(row) => ruleActionLabel[row.field_action]" label="字段运算" width="100">

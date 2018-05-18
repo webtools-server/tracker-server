@@ -41,6 +41,9 @@
           </el-option>
         </el-select>
       </el-form-item>
+      <el-form-item label="最近N分钟" prop="minutes">
+        <el-input v-model="ruleForm.minutes" auto-complete="off" placeholder="输入最近N分钟"></el-input>
+      </el-form-item>
       <!-- 字段名称 end -->
       <el-form-item label="字段运算" prop="fieldAction">
         <el-select v-model="ruleForm.fieldAction" placeholder="请选择">
@@ -148,9 +151,11 @@ export default {
       perfFieldsNameLabel: {},
       ruleActionLabel: {},
       statTypeLabel: {},
+      originRuleForm: {}, // 原来的ruleForm
       ruleForm: {
         type: '',
         title: '',
+        minutes: '5',
         fieldName: '',
         fieldAction: '',
         fieldValue: '',
@@ -164,6 +169,10 @@ export default {
         ],
         type: [
           { required: true, message: '请选择规则类型', trigger: 'change' }
+        ],
+        minutes: [
+          { required: true, message: '输入最近N分钟，必须为正整数', trigger: 'blur' },
+          { pattern: /^[1-9]\d*$/, message: '必须为正整数', trigger: 'blur' }
         ],
         fieldName: [
           { required: true, message: '请选择字段名称', trigger: 'change' }
@@ -187,6 +196,7 @@ export default {
     }
   },
   created() {
+    this.originRuleForm = Object.assign({}, this.ruleForm);
     this.normalizeDataByFields();
     api.getFieldsData().then((res) => {
       if (res.code === 0) {
@@ -258,7 +268,7 @@ export default {
     },
     resetValue() {
       this.$refs.ruleForm.resetFields();
-      Object.keys(this.ruleForm).forEach(rule => this.ruleForm[rule] = '');
+      this.ruleForm = Object.assign({}, this.originRuleForm);
     }
   },
   watch: {
