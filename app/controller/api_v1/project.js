@@ -39,6 +39,7 @@ module.exports = (app) => {
             pid,
             type: row.type,
             title: row.title,
+            minutes: row.minutes,
             field_name: row.field_name,
             field_action: row.field_action,
             field_value: row.field_value,

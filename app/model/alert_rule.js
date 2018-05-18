@@ -25,7 +25,7 @@ module.exports = (app) => {
     },
     minutes: {
       type: INTEGER,
-      defaultValue: 0
+      defaultValue: 5
     },
     field_name: {
       type: STRING,
