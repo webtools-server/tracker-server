@@ -3,11 +3,12 @@
  */
 
 const { TRACKER_TYPE } = require('../common/enum');
+const util = require('../common/util');
 const dataField = require('../data/field');
 const dataAction = require('../data/action');
 const dataType = require('../data/type');
 
-const MAX_LIMIT = 500;
+const MAX_LIMIT = 800;
 
 module.exports = (app) => {
   class AlertService extends app.Service {
@@ -59,9 +60,9 @@ module.exports = (app) => {
     runRule(data, rule) {
       // 字段值
       const fieldValue = data[rule.field_name];
-      if (fieldValue === undefined) {
-        return false;
-      }
+      if (fieldValue === undefined) return false;
+      // timestamp必须在最近N分钟内
+      if ((Date.now() - util.getMillisecondsByMinutes(rule.minutes)) > data.timestamp) return false;
       return this.useAction(rule.field_action, fieldValue, rule.field_value);
     }
 

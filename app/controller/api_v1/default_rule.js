@@ -75,6 +75,7 @@ module.exports = (app) => {
       const result = yield ctx.service.defaultRule.createOne({
         type: reqBody.type,
         title: reqBody.title,
+        minutes: reqBody.minutes,
         field_name: reqBody.fieldName,
         field_action: reqBody.fieldAction,
         field_value: reqBody.fieldValue,
@@ -108,6 +109,7 @@ module.exports = (app) => {
         {
           type: reqBody.type,
           title: reqBody.title,
+          minutes: reqBody.minutes,
           field_name: reqBody.fieldName,
           field_action: reqBody.fieldAction,
           field_value: reqBody.fieldValue,

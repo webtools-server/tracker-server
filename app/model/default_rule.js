@@ -19,6 +19,10 @@ module.exports = (app) => {
       type: STRING,
       comment: '规则名称'
     },
+    minutes: {
+      type: INTEGER,
+      defaultValue: 5
+    },
     field_name: {
       type: STRING,
       comment: '字段名称'

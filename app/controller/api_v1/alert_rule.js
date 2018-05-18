@@ -39,6 +39,7 @@ module.exports = (app) => {
         'pid',
         'type',
         'title',
+        'minutes',
         'fieldName',
         'fieldAction',
         'fieldValue',
@@ -66,6 +67,7 @@ module.exports = (app) => {
         pid: bodyFields.pid,
         type: bodyFields.type,
         title: bodyFields.title,
+        minutes: bodyFields.minutes,
         field_name: bodyFields.fieldName,
         field_action: bodyFields.fieldAction,
         field_value: bodyFields.fieldValue,
@@ -88,6 +90,7 @@ module.exports = (app) => {
       const { checkSuccess, bodyFields } = this.checkBodyFields([
         'type',
         'title',
+        'minutes',
         'fieldName',
         'fieldAction',
         'fieldValue',
@@ -108,6 +111,7 @@ module.exports = (app) => {
         {
           type: bodyFields.type,
           title: bodyFields.title,
+          minutes: bodyFields.minutes,
           field_name: bodyFields.fieldName,
           field_action: bodyFields.fieldAction,
           field_value: bodyFields.fieldValue,

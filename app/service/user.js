@@ -18,6 +18,10 @@ module.exports = (app) => {
       return yield this.ctx.model.User.findOne({ attributes, where: params });
     }
 
+    * findOneByUserName(username) {
+      return yield this.ctx.model.User.findOne({ where: { username } });
+    }
+
     * findOneById(id) {
       return yield this.ctx.model.User.findOne({ where: { id } });
     }

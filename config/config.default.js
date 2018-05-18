@@ -67,5 +67,14 @@ module.exports = (appInfo) => {
     }
   };
 
+  // tracker配置
+  config.sysAdmin = {
+    pageNum: 10, // 每页数量
+    maxLimit: 100, // 列表最大值
+    apiThreshold: 3000, // 接口响应时间超过该值的时候上报
+    slowResponseTime: 10000, // 接口最慢响应时间，统计报表计算平均响应时间的时候会过滤掉
+    queryUrl: 'http://120.132.109.152:9009/_sql' // 接口地址
+  };
+
   return config;
 };

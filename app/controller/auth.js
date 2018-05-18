@@ -4,7 +4,6 @@
 
 const util = require('../common/util');
 const { RET_CODE } = require('../common/enum');
-const userData = require('../data/user.json');
 
 module.exports = (app) => {
   /* eslint-disable require-yield */
@@ -31,11 +30,9 @@ module.exports = (app) => {
     * check() {
       const ctx = this.ctx;
       const body = ctx.request.body;
+      const user = yield ctx.service.user.findOneByUserName(body.username);
 
-      // 判断用户名和密码是否正确
-      const password = userData[body.username];
-
-      if (password === util.md5(body.password)) {
+      if (user && user.password === util.md5(body.password)) {
         ctx.session.username = body.username;
         ctx.body = {
           code: RET_CODE.OK,

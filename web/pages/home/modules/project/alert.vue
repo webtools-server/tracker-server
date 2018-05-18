@@ -88,9 +88,11 @@ export default {
         pid: '',
         title: ''
       },
+      originRuleForm: {}, // 原来的ruleForm
       ruleForm: {
         type: '',
         title: '',
+        minutes: '5',
         fieldName: '',
         fieldAction: '',
         fieldValue: '',
@@ -114,6 +116,7 @@ export default {
     };
   },
   created() {
+    this.originRuleForm = Object.assign({}, this.ruleForm);
     const params = this.$route.params;
     const pid = params.pid;
 
@@ -199,8 +202,7 @@ export default {
     handleAddRule() {
       const ruleForm = {};
       this.isCreate = true;
-      Object.keys(this.ruleForm).forEach(rule => ruleForm[rule] = '');
-      this.ruleForm = ruleForm;
+      this.ruleForm = Object.assign({}, this.originRuleForm);
       this.dialogRuleVisible = true;
     },
 
@@ -232,6 +234,7 @@ export default {
       this.ruleForm = {
         id: row.id,
         type: row.type.toString(),
+        minutes: (row.minutes || '').toString(),
         title: row.title,
         fieldName: row.field_name.toString(),
         fieldAction: row.field_action.toString(),
