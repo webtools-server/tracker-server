@@ -139,6 +139,17 @@ function normailizeFieldObject(fields) {
   }, {});
 }
 
+/**
+ * 通过分钟获取毫秒
+ * @param {Number} minutes
+ * @return {Number}
+ */
+function getMillisecondsByMinutes(minutes) {
+  const m = Number(minutes);
+  if (isNaN(m)) return 0;
+  return m * 60 * 1000;
+}
+
 module.exports = {
   isObject,
   isBoolean,
@@ -149,5 +160,6 @@ module.exports = {
   parseJson,
   getUrlPath,
   findIndexFromObjArray,
-  normailizeFieldObject
+  normailizeFieldObject,
+  getMillisecondsByMinutes
 };
