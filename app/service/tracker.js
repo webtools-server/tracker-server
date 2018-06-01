@@ -247,7 +247,17 @@ module.exports = (app) => {
         data: { sql },
         dataAsQueryString: true
       });
-      return JSON.parse(result.data.toString('utf8'));
+      const jsonStr = result.data.toString('utf8');
+
+      // logger
+      this.ctx.logger.info(`[SQL]: ${sql}`);
+      this.ctx.logger.info(`[RESULT]: ${jsonStr}`);
+
+      try {
+        return JSON.parse(jsonStr);
+      } catch (e) {
+        return {};
+      }
     }
   }
   return TrackerService;
