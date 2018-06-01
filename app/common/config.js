@@ -17,7 +17,7 @@ const API_THRESHOLD = 3000;
 const SLOW_RESPONSE_TIME = 10000;
 
 // 接口地址
-const QUERY_URL = 'http://120.132.109.152:9009/_sql';
+const QUERY_URL = 'http:///172.16.1.5:9009/_sql';
 
 module.exports = {
   PAGE_NUM,
