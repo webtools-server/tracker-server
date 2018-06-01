@@ -1,0 +1,14 @@
+{
+  "name": "docs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "jfet.config.js",
+  "scripts": {
+    "doc": "jfet doc --build",
+    "doc:dev": "jfet doc --serve",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
